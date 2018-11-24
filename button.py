@@ -22,7 +22,7 @@ class Button(UiElement):
     STATE_NORMAL = 0
     STATE_PRESSED = 1
 
-    def __init__(self, x, y, normalImage, pressedImage):
+    def __init__(self, x, y, normalImage, pressedImage, onClickedFunc):
         normalImageWidth, normalImageHeight = normalImage.get_size()
         pressedImageWidth, pressedImageHeight = pressedImage.get_size()
 
@@ -33,9 +33,10 @@ class Button(UiElement):
         self.normalImage = normalImage
         self.pressedImage = pressedImage
         self.state = self.STATE_NORMAL
+        self.onClickedFunc = onClickedFunc
 
     @staticmethod
-    def createSolidButton(x, y, width, height, colorNormal, colorPressed):
+    def createSolidButton(x, y, width, height, colorNormal, colorPressed, onClickedFunc):
         """ Creates a solid button, where colorNormal is the normal, unpressed color, and
             colorPressed is the pressed color.
              colorNormal and colorPressed are tuples, containing red, blue, green. """
@@ -46,7 +47,7 @@ class Button(UiElement):
         pressedImage = pressedSurface.convert()
         pressedImage.fill(colorPressed)
 
-        return Button(x, y, normalImage, pressedImage)
+        return Button(x, y, normalImage, pressedImage, onClickedFunc)
 
     def getNormal(self):
         return self.normalImage
@@ -67,6 +68,8 @@ class Button(UiElement):
     def setPressed(self):
         self.state = self.STATE_PRESSED
         self.onPressed()
+        if self.onClickedFunc is not None:
+            self.onClickedFunc()
 
     #
     # ************ OVERRIDABLES ************

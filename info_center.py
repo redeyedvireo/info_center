@@ -48,7 +48,7 @@ screen.blit(fontimg1, (0,0))
 uiManager = UiManager(pygame, screen)
 
 # Create a button
-testButton = Button.createSolidButton(600, 100, 80, 80, (50, 100, 190), (200, 30, 140))
+testButton = Button.createSolidButton(600, 100, 80, 80, (50, 100, 190), (200, 30, 140), lambda: print("Big button clicked"))
 uiManager.addElement(testButton)
 
 # Create a Touch Area
@@ -57,9 +57,9 @@ uiManager.addElement(testTouchArea)
 
 # Create a Button Strip
 testButtonStrip = ButtonStrip(0, 350, ButtonStrip.HORIZONTAL, 25)
-button1 = Button.createSolidButton(0, 0, 40, 40, BLUE, (100, 150, 200))
-button2 = Button.createSolidButton(0, 0, 40, 40, BLUE, (150, 200, 100))
-button3 = Button.createSolidButton(0, 0, 40, 40, BLUE, (200, 100, 150))
+button1 = Button.createSolidButton(0, 0, 40, 40, BLUE, (100, 150, 200), lambda: print("Button 1 clicked"))
+button2 = Button.createSolidButton(0, 0, 40, 40, BLUE, (150, 200, 100), lambda: print("Button 2 clicked"))
+button3 = Button.createSolidButton(0, 0, 40, 40, BLUE, (200, 100, 150), lambda: print("Button 3 clicked"))
 
 testButtonStrip.addButton(button1)
 testButtonStrip.addButton(button2)
@@ -67,9 +67,9 @@ testButtonStrip.addButton(button3)
 
 # Create a vertical Button Strip
 testVerticalButtonStrip = ButtonStrip(759, 0, ButtonStrip.VERTICAL)
-button4 = Button.createSolidButton(0, 0, 40, 40, BLUE, (100, 150, 200))
-button5 = Button.createSolidButton(0, 0, 40, 40, BLUE, (150, 200, 100))
-button6 = Button.createSolidButton(0, 0, 40, 40, BLUE, (200, 100, 150))
+button4 = Button.createSolidButton(0, 0, 40, 40, BLUE, (100, 150, 200), lambda: print("Button 4 clicked"))
+button5 = Button.createSolidButton(0, 0, 40, 40, BLUE, (150, 200, 100), lambda: print("Button 5 clicked"))
+button6 = Button.createSolidButton(0, 0, 40, 40, BLUE, (200, 100, 150), lambda: print("Button 6 clicked"))
 
 testVerticalButtonStrip.addButton(button4)
 testVerticalButtonStrip.addButton(button5)

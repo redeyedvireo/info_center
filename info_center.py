@@ -10,6 +10,7 @@ from pygame.locals import *
 from ui_manager import UiManager
 from button import Button
 from touch_area import TouchArea
+from button_strip import ButtonStrip
 
 WHITE = 255, 255, 255
 #GRAY = 20, 20, 20
@@ -53,6 +54,29 @@ uiManager.addElement(testButton)
 # Create a Touch Area
 testTouchArea = TouchArea(0, 450, 800, 30, 1)
 uiManager.addElement(testTouchArea)
+
+# Create a Button Strip
+testButtonStrip = ButtonStrip(0, 350, ButtonStrip.HORIZONTAL, 25)
+button1 = Button.createSolidButton(0, 0, 40, 40, BLUE, (100, 150, 200))
+button2 = Button.createSolidButton(0, 0, 40, 40, BLUE, (150, 200, 100))
+button3 = Button.createSolidButton(0, 0, 40, 40, BLUE, (200, 100, 150))
+
+testButtonStrip.addButton(button1)
+testButtonStrip.addButton(button2)
+testButtonStrip.addButton(button3)
+
+# Create a vertical Button Strip
+testVerticalButtonStrip = ButtonStrip(759, 0, ButtonStrip.VERTICAL)
+button4 = Button.createSolidButton(0, 0, 40, 40, BLUE, (100, 150, 200))
+button5 = Button.createSolidButton(0, 0, 40, 40, BLUE, (150, 200, 100))
+button6 = Button.createSolidButton(0, 0, 40, 40, BLUE, (200, 100, 150))
+
+testVerticalButtonStrip.addButton(button4)
+testVerticalButtonStrip.addButton(button5)
+testVerticalButtonStrip.addButton(button6)
+
+uiManager.addElement(testButtonStrip)
+uiManager.addElement(testVerticalButtonStrip)
 
 uiManager.performInitialDraw()
 

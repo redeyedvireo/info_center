@@ -17,5 +17,26 @@
 #        edge is being clung to.  For example, in "cling to right side", the
 #        x is determined by the width of the largest button width.
 class ButtonStrip:
-    def __init__(self):
-        pass
+    HORIZONTAL = 0
+    VERTICAL = 1
+
+    def __init__(self, x, y, orientation, spacing = 5):
+        self.x = x
+        self.y = y
+        self.spacing = spacing
+        self.orientation = orientation
+
+        # This is where the next button will be inserted
+        self.insertionPosX = x
+        self.insertionPosY = y
+
+        self.buttons = []
+
+    def addButton(self, button):
+        button.move(self.insertionPosX, self.insertionPosY)
+        self.buttons.append(button)
+
+        if self.orientation == self.HORIZONTAL:
+            self.insertionPosX += button.rect.width + self.spacing
+        else:
+            self.insertionPosY += button.rect.height + self.spacing

@@ -8,6 +8,7 @@
 import pygame
 from button import Button
 from touch_area import TouchArea
+from button_strip import ButtonStrip
 
 
 class UiManager:
@@ -17,6 +18,7 @@ class UiManager:
         self.screen = screen
         self.buttonList = []
         self.touchAreaList = []
+        self.buttonStripList = []
 
     def performInitialDraw(self):
         """ Performs the initial drawing of all elements. """
@@ -34,6 +36,10 @@ class UiManager:
             self.buttonList.append(uiElement)
         elif isinstance(uiElement, TouchArea):
             self.touchAreaList.append(uiElement)
+        elif isinstance(uiElement, ButtonStrip):
+            self.buttonStripList.append(uiElement)
+            for button in uiElement.buttons:
+                self.addElement(button)
 
     def pressButton(self, mousePos):
         button = self.getHitButton(mousePos)

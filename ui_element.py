@@ -7,14 +7,14 @@ import pygame
 class UiElement:
     def __init__(self, x, y, width, height):
         super(UiElement, self).__init__()
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
         self.rect = pygame.Rect(x, y, width, height)
 
     def size(self):
         return self.width, self.height
     
     def pos(self):
-        return self.x, self.y
+        return self.rect.x, self.rect.y
+
+    def move(self, newX, newY):
+        """ Moves the element to a new position. """
+        self.rect = self.rect.move(newX, newY)

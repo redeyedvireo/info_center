@@ -47,14 +47,7 @@ screen.blit(fontimg1, (0,0))
 uiManager = UiManager(pygame, screen)
 
 # Create a button
-normalSurface = pygame.Surface((80, 80))
-normalImage = normalSurface.convert()
-normalImage.fill((50, 100, 190))
-pressedSurface = pygame.Surface((80, 80))
-pressedImage = pressedSurface.convert()
-pressedImage.fill((200, 30, 140))
-
-testButton = Button(500, 100, normalImage, pressedImage)
+testButton = Button.createSolidButton(600, 100, 80, 80, (50, 100, 190), (200, 30, 140))
 uiManager.addElement(testButton)
 
 # Create a Touch Area

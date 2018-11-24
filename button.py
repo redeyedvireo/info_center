@@ -3,6 +3,7 @@
 # Button class.
 
 from ui_element import UiElement
+from pygame import Surface
 
 
 class Button(UiElement):
@@ -32,6 +33,20 @@ class Button(UiElement):
         self.normalImage = normalImage
         self.pressedImage = pressedImage
         self.state = self.STATE_NORMAL
+
+    @staticmethod
+    def createSolidButton(x, y, width, height, colorNormal, colorPressed):
+        """ Creates a solid button, where colorNormal is the normal, unpressed color, and
+            colorPressed is the pressed color.
+             colorNormal and colorPressed are tuples, containing red, blue, green. """
+        normalSurface = Surface((width, height))
+        normalImage = normalSurface.convert()
+        normalImage.fill(colorNormal)
+        pressedSurface = Surface((width, height))
+        pressedImage = pressedSurface.convert()
+        pressedImage.fill(colorPressed)
+
+        return Button(x, y, normalImage, pressedImage)
 
     def getNormal(self):
         return self.normalImage

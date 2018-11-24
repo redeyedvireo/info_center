@@ -58,7 +58,7 @@ testButton = Button(500, 100, normalImage, pressedImage)
 uiManager.addElement(testButton)
 
 # Create a Touch Area
-testTouchArea = TouchArea(0, 450, 800, 30)
+testTouchArea = TouchArea(0, 450, 800, 30, 1)
 uiManager.addElement(testTouchArea)
 
 uiManager.performInitialDraw()
@@ -67,7 +67,9 @@ while 1:
     for event in pygame.event.get():
         if uiManager.handleEvents(event):
             pygame.display.update()
-            pygame.time.delay(250)
+
+            # TODO: Determine if a delay is necessary here.  Does lack of a delay cause a CPU spike?
+            pygame.time.delay(200)
         else:
             pygame.display.quit()
             sys.exit(0)

@@ -23,9 +23,10 @@ class UiManager:
         for element in self.buttonList:
             self.screen.blit(element.getNormal(), element.pos())
 
-        # For debugging, draw a frame around the touch areas
+        # Draw a frame around the touch areas, as required
         for touchArea in self.touchAreaList:
-            self.pygame.draw.rect(self.screen, (255, 255, 255), touchArea.rect, 1)
+            if touchArea.border > 0:
+                self.pygame.draw.rect(self.screen, (255, 255, 255), touchArea.rect, touchArea.border)
 
     def addElement(self, uiElement):
         """ Registers the given UI element. """

@@ -7,6 +7,7 @@
 import os, sys, pygame
 from pygame.locals import *
 from math import pi
+import ui_manager
 
 WHITE = 255,255,255
 GRAY = 20,20,20
@@ -37,20 +38,23 @@ myimage.set_colorkey(ckey, RLEACCEL)
 font = pygame.font.Font(None, 220)
 fontimg1 = font.render("12:34", 1, GRAY)
 screen.blit(fontimg1, (0,0))
-                  
+
+uiManager = UiManager(pygame)
+
+# Create a button
+normalSurface = pygame.Surface((80, 80))
+normalImage = normalSurface.convert()
+pressedSurface = pygame.Surface((80, 80))
+pressedImage = pressedSurface.convert()
+
+testButton = Button(500, 100, 80, 80, normalImage, pressedImage)
+uiManager.add(testButton)
+
+
+
 while 1:
 
-    for event in pygame.event.get():
-        if event.type == QUIT:
-            pygame.display.quit()
-            sys.exit(0)
-        elif event.type == KEYDOWN and event.key == K_ESCAPE:
-            pygame.display.quit()
-            sys.exit(0)
-        elif event.type == MOUSEBUTTONUP:
-            pygame.display.quit()
-            sys.exit(0)
-    
+    uiManager.handleEvent(pygame)
 
     pygame.display.update() 
     pygame.time.delay(500)

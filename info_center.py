@@ -12,6 +12,7 @@ from ui_screen import UiScreen
 from button import Button
 from touch_area import TouchArea
 from button_strip import ButtonStrip
+from time_panel import TimePanel
 
 WHITE = 255, 255, 255
 #GRAY = 20, 20, 20
@@ -44,12 +45,6 @@ def mainLoop():
     myimage = newsurface.convert()
     ckey = myimage.get_at((0,0))
     myimage.set_colorkey(ckey, RLEACCEL)
-
-
-    # Show the time
-    font = pygame.font.Font(None, 220)
-    fontimg1 = font.render("12:34", 1, GRAY)
-    screen.blit(fontimg1, (0,0))
 
     uiManager = UiManager(pygame, screen)
 
@@ -86,6 +81,11 @@ def mainLoop():
 
     mainScreen.addElement(testButtonStrip)
     mainScreen.addElement(testVerticalButtonStrip)
+
+    # Create a TimePanel
+    timePanel = TimePanel(0, 0, 400, 300, pygame, screen)
+
+    mainScreen.addElement(timePanel)
 
     uiManager.addScreen("main", mainScreen)
 

@@ -8,6 +8,7 @@ import os, sys
 import pygame
 from pygame.locals import *
 from ui_manager import UiManager
+from ui_screen import UiScreen
 from button import Button
 from touch_area import TouchArea
 from button_strip import ButtonStrip
@@ -21,87 +22,108 @@ BLUE = 0, 0, 255
 RED = 255, 0, 0
 
 
-pygame.init()
+def backToMainScreen(uiManager):
+    print("Yet another button clicked")
+    uiManager.displayScreen("main")
 
-size = width, height = 800, 480
-# screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
-screen = pygame.display.set_mode(size)
-pygame.display.set_caption("Info Center")
+def mainLoop():
+    pygame.init()
 
-# JAG: Test fullscreen
-# pygame.display.toggle_fullscreen()
+    size = width, height = 800, 480
+    # screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
+    screen = pygame.display.set_mode(size)
+    pygame.display.set_caption("Info Center")
 
-# Now we draw onto a new surface, and blit the result to the screen
+    # JAG: Test fullscreen
+    # pygame.display.toggle_fullscreen()
 
-# Create myimage and set transparency to top left pixel
-newsurface = pygame.Surface((80,80))
-myimage = newsurface.convert()
-ckey = myimage.get_at((0,0))
-myimage.set_colorkey(ckey, RLEACCEL)
+    # Now we draw onto a new surface, and blit the result to the screen
+
+    # Create myimage and set transparency to top left pixel
+    newsurface = pygame.Surface((80,80))
+    myimage = newsurface.convert()
+    ckey = myimage.get_at((0,0))
+    myimage.set_colorkey(ckey, RLEACCEL)
 
 
-# Show the time
-font = pygame.font.Font(None, 220)
-fontimg1 = font.render("12:34", 1, GRAY)
-screen.blit(fontimg1, (0,0))
+    # Show the time
+    font = pygame.font.Font(None, 220)
+    fontimg1 = font.render("12:34", 1, GRAY)
+    screen.blit(fontimg1, (0,0))
 
-uiManager = UiManager(pygame, screen)
+    uiManager = UiManager(pygame, screen)
 
-# Create a button
-testButton = Button.createSolidButton(600, 100, 80, 80, (50, 100, 190), (200, 30, 140), lambda: print("Big button clicked"))
-uiManager.addElement(testButton)
+    # Create the main screen
+    mainScreen = UiScreen(pygame, screen)
 
-# Create a Touch Area
-testTouchArea = TouchArea(0, 450, 800, 30, 1)
-uiManager.addElement(testTouchArea)
+    # Create a button
+    testButton = Button.createSolidButton(600, 100, 80, 80, (50, 100, 190), (200, 30, 140), lambda: uiManager.displayScreen("second"))
+    mainScreen.addElement(testButton)
 
-# Create a Button Strip
-testButtonStrip = ButtonStrip(0, 350, ButtonStrip.HORIZONTAL, 25)
-button1 = Button.createSolidButton(0, 0, 40, 40, BLUE, (100, 150, 200), lambda: print("Button 1 clicked"))
-button2 = Button.createSolidButton(0, 0, 40, 40, BLUE, (150, 200, 100), lambda: print("Button 2 clicked"))
-button3 = Button.createSolidButton(0, 0, 40, 40, BLUE, (200, 100, 150), lambda: print("Button 3 clicked"))
+    # Create a Touch Area
+    testTouchArea = TouchArea(0, 450, 800, 30, 1)
+    mainScreen.addElement(testTouchArea)
 
-testButtonStrip.addButton(button1)
-testButtonStrip.addButton(button2)
-testButtonStrip.addButton(button3)
+    # Create a Button Strip
+    testButtonStrip = ButtonStrip(0, 350, ButtonStrip.HORIZONTAL, 25)
+    button1 = Button.createSolidButton(0, 0, 40, 40, BLUE, (100, 150, 200), lambda: print("Button 1 clicked"))
+    button2 = Button.createSolidButton(0, 0, 40, 40, BLUE, (150, 200, 100), lambda: print("Button 2 clicked"))
+    button3 = Button.createSolidButton(0, 0, 40, 40, BLUE, (200, 100, 150), lambda: print("Button 3 clicked"))
 
-# Create a vertical Button Strip
-testVerticalButtonStrip = ButtonStrip(759, 0, ButtonStrip.VERTICAL)
-button4 = Button.createSolidButton(0, 0, 40, 40, BLUE, (100, 150, 200), lambda: print("Button 4 clicked"))
-button5 = Button.createSolidButton(0, 0, 40, 40, BLUE, (150, 200, 100), lambda: print("Button 5 clicked"))
-button6 = Button.createSolidButton(0, 0, 40, 40, BLUE, (200, 100, 150), lambda: print("Button 6 clicked"))
+    testButtonStrip.addButton(button1)
+    testButtonStrip.addButton(button2)
+    testButtonStrip.addButton(button3)
 
-testVerticalButtonStrip.addButton(button4)
-testVerticalButtonStrip.addButton(button5)
-testVerticalButtonStrip.addButton(button6)
+    # Create a vertical Button Strip
+    testVerticalButtonStrip = ButtonStrip(759, 0, ButtonStrip.VERTICAL)
+    button4 = Button.createSolidButton(0, 0, 40, 40, BLUE, (100, 150, 200), lambda: print("Button 4 clicked"))
+    button5 = Button.createSolidButton(0, 0, 40, 40, BLUE, (150, 200, 100), lambda: print("Button 5 clicked"))
+    button6 = Button.createSolidButton(0, 0, 40, 40, BLUE, (200, 100, 150), lambda: print("Button 6 clicked"))
 
-uiManager.addElement(testButtonStrip)
-uiManager.addElement(testVerticalButtonStrip)
+    testVerticalButtonStrip.addButton(button4)
+    testVerticalButtonStrip.addButton(button5)
+    testVerticalButtonStrip.addButton(button6)
 
-uiManager.performInitialDraw()
+    mainScreen.addElement(testButtonStrip)
+    mainScreen.addElement(testVerticalButtonStrip)
 
-while 1:
-    for event in pygame.event.get():
-        if uiManager.handleEvents(event):
-            pygame.display.update()
+    uiManager.addScreen("main", mainScreen)
 
-            # TODO: Determine if a delay is necessary here.  Does lack of a delay cause a CPU spike?
-            pygame.time.delay(200)
-        else:
-            pygame.display.quit()
-            sys.exit(0)
+    # Create a second screen
+    secondScreen = UiScreen(pygame, screen)
+    secondScreenButton = Button.createSolidButton(400, 240, 100, 100, BLUE, GREEN, lambda : backToMainScreen(uiManager))
+    secondScreen.addElement(secondScreenButton)
+    uiManager.addScreen("second", secondScreen)
 
-# while 1:
-#     for event in pygame.event.get():
-#         if event.type == pygame.QUIT:
-#             pygame.display.quit()
-#             sys.exit(0)
-#         elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-#             pygame.display.quit()
-#             sys.exit(0)
-#         elif event.type == pygame.MOUSEBUTTONUP:
-#             pygame.display.quit()
-#             sys.exit(0)
-#         else:
-#             pygame.display.update()
-#             pygame.time.delay(500)
+    uiManager.displayScreen("main")
+
+    while 1:
+        for event in pygame.event.get():
+            if uiManager.handleEvents(event):
+                pygame.display.update()
+
+                # TODO: Determine if a delay is necessary here.  Does lack of a delay cause a CPU spike?
+                pygame.time.delay(200)
+            else:
+                pygame.display.quit()
+                sys.exit(0)
+
+    # while 1:
+    #     for event in pygame.event.get():
+    #         if event.type == pygame.QUIT:
+    #             pygame.display.quit()
+    #             sys.exit(0)
+    #         elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+    #             pygame.display.quit()
+    #             sys.exit(0)
+    #         elif event.type == pygame.MOUSEBUTTONUP:
+    #             pygame.display.quit()
+    #             sys.exit(0)
+    #         else:
+    #             pygame.display.update()
+    #             pygame.time.delay(500)
+
+
+# ---------------------------------------------------------------
+if __name__ == "__main__":
+    mainLoop()

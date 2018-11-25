@@ -64,12 +64,12 @@ class Button(UiElement):
     def setNormal(self):
         self.state = self.STATE_NORMAL
         self.onReleased()
+        if self.onClickedFunc is not None:
+            self.onClickedFunc()
 
     def setPressed(self):
         self.state = self.STATE_PRESSED
         self.onPressed()
-        if self.onClickedFunc is not None:
-            self.onClickedFunc()
 
     #
     # ************ OVERRIDABLES ************

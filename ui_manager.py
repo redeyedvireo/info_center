@@ -16,52 +16,42 @@ class UiManager:
         super(UiManager, self).__init__()
         self.pygame = pygame
         self.screen = screen
-        self.buttonList = []
-        self.touchAreaList = []
-        self.buttonStripList = []
 
-    def performInitialDraw(self):
-        """ Performs the initial drawing of all elements. """
-        for element in self.buttonList:
-            self.screen.blit(element.getNormal(), element.pos())
+        # A map of screen IDs to UiScreen objects.
+        self.screenMap = {}
 
-        # Draw a frame around the touch areas, as required
-        for touchArea in self.touchAreaList:
-            if touchArea.border > 0:
-                self.pygame.draw.rect(self.screen, (255, 255, 255), touchArea.rect, touchArea.border)
+        self.currentScreen = None
 
-    def addElement(self, uiElement):
-        """ Registers the given UI element. """
-        if isinstance(uiElement, Button):
-            self.buttonList.append(uiElement)
-        elif isinstance(uiElement, TouchArea):
-            self.touchAreaList.append(uiElement)
-        elif isinstance(uiElement, ButtonStrip):
-            self.buttonStripList.append(uiElement)
-            for button in uiElement.buttons:
-                self.addElement(button)
+    def addScreen(self, id, uiScreen):
+        self.screenMap[id] = uiScreen
+
+    def displayScreen(self, id):
+        self.currentScreen = self.screenMap[id]
+        #self.pygame.fill.rect(self.screen, (0, 0, 0), (0, 0, 800, 480))
+        self.screen.fill((0, 0, 0))
+        self.currentScreen.display()
 
     def pressButton(self, mousePos):
         button = self.getHitButton(mousePos)
         if button is not None:
-            button.setPressed()
             self.screen.blit(button.getSurface(), button.pos())
+            button.setPressed()
 
     def unpressButton(self, mousePos):
         button = self.getHitButton(mousePos)
         if button is not None:
-            button.setNormal()
             self.screen.blit(button.getSurface(), button.pos())
+            button.setNormal()
 
     def getHitButton(self, mousePos):
-        for button in self.buttonList:
+        for button in self.currentScreen.buttonList:
             if self.pointInElement(mousePos, button):
                 return button
 
         return None
 
     def getHitTouchArea(self, mousePos):
-        for touchArea in self.touchAreaList:
+        for touchArea in self.currentScreen.touchAreaList:
             if self.pointInElement(mousePos, touchArea):
                 return touchArea
 

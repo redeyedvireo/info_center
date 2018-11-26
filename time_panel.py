@@ -2,6 +2,7 @@
 #
 # A panel that displays the current time.
 
+import datetime
 from ui_panel import UiPanel
 
 # GRAY = 20, 20, 20
@@ -15,5 +16,9 @@ class TimePanel(UiPanel):
     def draw(self, pygame, screen):
         super(TimePanel, self).draw(pygame, screen)
         font = pygame.font.Font(None, 220)
-        fontimg = font.render("12:34", 1, GRAY)
+        timeStr = self.timeString()
+        fontimg = font.render(timeStr, 1, GRAY)
         screen.blit(fontimg, self.pos())
+
+    def timeString(self):
+        return datetime.datetime.now().strftime('%H:%M')

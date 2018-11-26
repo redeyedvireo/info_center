@@ -27,47 +27,9 @@ class UiManager:
 
     def displayScreen(self, id):
         self.currentScreen = self.screenMap[id]
-        #self.pygame.fill.rect(self.screen, (0, 0, 0), (0, 0, 800, 480))
         self.screen.fill((0, 0, 0))
         self.currentScreen.display()
 
-    def pressButton(self, mousePos):
-        button = self.getHitButton(mousePos)
-        if button is not None:
-            button.setPressed()
-            button.draw(self.pygame, self.screen)
-
-    def unpressButton(self, mousePos):
-        button = self.getHitButton(mousePos)
-        if button is not None:
-            button.setNormal()
-            button.draw(self.pygame, self.screen)
-            button.onClicked()
-
-    def getHitButton(self, mousePos):
-        for button in self.currentScreen.buttonList:
-            if self.pointInElement(mousePos, button):
-                return button
-
-        return None
-
-    def getHitTouchArea(self, mousePos):
-        for touchArea in self.currentScreen.touchAreaList:
-            if self.pointInElement(mousePos, touchArea):
-                return touchArea
-
-        return None
-
-    def touchAreaHitTest(self, mousePos):
-        touchArea = self.getHitTouchArea(mousePos)
-        if touchArea is not None:
-            return True
-        else:
-            return False
-
-    def pointInElement(self, pos, uiElement):
-        """ Determines if the given point is contained in the given element. """
-        return uiElement.rect.collidepoint(pos)
 
     # This should probably return a code that indicates whether the app
     # should change its status, such as to quit, or blank the screen, etc.
@@ -78,12 +40,8 @@ class UiManager:
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             return False
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            self.pressButton(event.pos)
-            return True
+            return self.currentScreen.handleMouseButtonDown(event)
         elif event.type == pygame.MOUSEBUTTONUP:
-            self.unpressButton(event.pos)
-            if self.touchAreaHitTest(event.pos):
-                return False
-            return True
+            return self.currentScreen.handleMouseButtonUp(event)
         else:
             return True

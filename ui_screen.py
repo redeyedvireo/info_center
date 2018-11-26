@@ -45,3 +45,51 @@ class UiScreen:
                 self.addElement(button)
         elif isinstance(uiElement, UiPanel):
             self.panelList.append(uiElement)
+
+    def handleMouseButtonDown(self, event):
+        self.pressButton(event.pos)
+        return True
+
+    def handleMouseButtonUp(self, event):
+        self.unpressButton(event.pos)
+        if self.touchAreaHitTest(event.pos):
+            return False
+        return True
+
+    def pressButton(self, mousePos):
+        button = self.getHitButton(mousePos)
+        if button is not None:
+            button.setPressed()
+            button.draw(self.pygame, self.screen)
+
+    def unpressButton(self, mousePos):
+        button = self.getHitButton(mousePos)
+        if button is not None:
+            button.setNormal()
+            button.draw(self.pygame, self.screen)
+            button.onClicked()
+
+    def getHitButton(self, mousePos):
+        for button in self.buttonList:
+            if self.pointInElement(mousePos, button):
+                return button
+
+        return None
+
+    def getHitTouchArea(self, mousePos):
+        for touchArea in self.touchAreaList:
+            if self.pointInElement(mousePos, touchArea):
+                return touchArea
+
+        return None
+
+    def touchAreaHitTest(self, mousePos):
+        touchArea = self.getHitTouchArea(mousePos)
+        if touchArea is not None:
+            return True
+        else:
+            return False
+
+    def pointInElement(self, pos, uiElement):
+        """ Determines if the given point is contained in the given element. """
+        return uiElement.rect.collidepoint(pos)

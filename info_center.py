@@ -83,7 +83,7 @@ def mainLoop():
     mainScreen.addElement(testVerticalButtonStrip)
 
     # Create a TimePanel
-    timePanel = TimePanel(0, 0, 400, 300, pygame, screen)
+    timePanel = TimePanel(0, 0, 400, 150, 1)
 
     mainScreen.addElement(timePanel)
 

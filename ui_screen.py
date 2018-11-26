@@ -24,15 +24,14 @@ class UiScreen:
         """ Displays the screen.  This involves displaying all elements.
             This is typically done when a new screen comes into view. """
         for element in self.buttonList:
-            self.screen.blit(element.getNormal(), element.pos())
+            element.draw(self.pygame, self.screen)
 
         for element in self.panelList:
-            element.draw()
+            element.draw(self.pygame, self.screen)
 
         # Draw a frame around the touch areas, as required
         for touchArea in self.touchAreaList:
-            if touchArea.border > 0:
-                self.pygame.draw.rect(self.screen, (255, 255, 255), touchArea.rect, touchArea.border)
+            touchArea.draw(self.pygame, self.screen)
 
     def addElement(self, uiElement):
         """ Registers the given UI element. """

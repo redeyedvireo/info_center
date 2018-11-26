@@ -5,12 +5,13 @@
 import pygame
 
 class UiElement:
-    def __init__(self, x, y, width, height):
+    def __init__(self, x, y, width, height, borderWidth):
         super(UiElement, self).__init__()
         self.rect = pygame.Rect(x, y, width, height)
+        self.borderWidth = borderWidth
 
     def size(self):
-        return self.width, self.height
+        return self.rect.size
     
     def pos(self):
         return self.rect.x, self.rect.y
@@ -18,3 +19,7 @@ class UiElement:
     def move(self, newX, newY):
         """ Moves the element to a new position. """
         self.rect = self.rect.move(newX, newY)
+
+    def draw(self, pygame, screen):
+        if self.borderWidth > 0:
+            pygame.draw.rect(screen, (255, 255, 255), self.rect, self.borderWidth)

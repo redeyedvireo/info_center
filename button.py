@@ -22,14 +22,14 @@ class Button(UiElement):
     STATE_NORMAL = 0
     STATE_PRESSED = 1
 
-    def __init__(self, x, y, normalImage, pressedImage, onClickedFunc):
+    def __init__(self, x, y, normalImage, pressedImage, onClickedFunc, buttonWidth):
         normalImageWidth, normalImageHeight = normalImage.get_size()
         pressedImageWidth, pressedImageHeight = pressedImage.get_size()
 
         width = max(normalImageWidth, pressedImageWidth)
         height = max(normalImageHeight, pressedImageHeight)
 
-        super(Button, self).__init__(x, y, width, height)
+        super(Button, self).__init__(x, y, width, height, buttonWidth)
         self.normalImage = normalImage
         self.pressedImage = pressedImage
         self.state = self.STATE_NORMAL
@@ -47,7 +47,11 @@ class Button(UiElement):
         pressedImage = pressedSurface.convert()
         pressedImage.fill(colorPressed)
 
-        return Button(x, y, normalImage, pressedImage, onClickedFunc)
+        return Button(x, y, normalImage, pressedImage, onClickedFunc, 0)
+
+    def draw(self, pygame, screen):
+        super(Button, self).draw(pygame, screen)
+        screen.blit(self.getSurface(), self.pos())
 
     def getNormal(self):
         return self.normalImage
@@ -64,12 +68,14 @@ class Button(UiElement):
     def setNormal(self):
         self.state = self.STATE_NORMAL
         self.onReleased()
-        if self.onClickedFunc is not None:
-            self.onClickedFunc()
 
     def setPressed(self):
         self.state = self.STATE_PRESSED
         self.onPressed()
+
+    def onClicked(self):
+        if self.onClickedFunc is not None:
+            self.onClickedFunc()
 
     #
     # ************ OVERRIDABLES ************

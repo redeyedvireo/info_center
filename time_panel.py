@@ -9,11 +9,11 @@ GRAY = 120, 120, 120
 
 
 class TimePanel(UiPanel):
-    def __init__(self, x, y, width, height, pygame, screen):
-        super(TimePanel, self).__init__(x, y, width, height, True, pygame, screen)
+    def __init__(self, x, y, width, height, borderWidth):
+        super(TimePanel, self).__init__(x, y, width, height, True, borderWidth)
 
-    def draw(self):
-        super(TimePanel, self).draw()
-        font = self.pygame.font.Font(None, 220)
+    def draw(self, pygame, screen):
+        super(TimePanel, self).draw(pygame, screen)
+        font = pygame.font.Font(None, 220)
         fontimg = font.render("12:34", 1, GRAY)
-        self.screen.blit(fontimg, self.pos())
+        screen.blit(fontimg, self.pos())

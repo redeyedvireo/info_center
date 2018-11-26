@@ -34,14 +34,15 @@ class UiManager:
     def pressButton(self, mousePos):
         button = self.getHitButton(mousePos)
         if button is not None:
-            self.screen.blit(button.getSurface(), button.pos())
             button.setPressed()
+            button.draw(self.pygame, self.screen)
 
     def unpressButton(self, mousePos):
         button = self.getHitButton(mousePos)
         if button is not None:
-            self.screen.blit(button.getSurface(), button.pos())
             button.setNormal()
+            button.draw(self.pygame, self.screen)
+            button.onClicked()
 
     def getHitButton(self, mousePos):
         for button in self.currentScreen.buttonList:

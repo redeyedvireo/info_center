@@ -16,3 +16,9 @@ class TouchArea(UiElement):
     #  - onReleased - when button released
     def __init__(self, x, y, width, height, borderWidth):
         super(TouchArea, self).__init__(x, y, width, height, borderWidth)
+
+    def setNormal(self):
+        pass
+
+    def setPressed(self):
+        pass

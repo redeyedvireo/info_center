@@ -47,48 +47,42 @@ class UiScreen:
             self.panelList.append(uiElement)
 
     def handleMouseButtonDown(self, event):
-        self.pressButton(event.pos)
+        self.pressUiElements(event.pos, self.buttonList)
+        self.pressUiElements(event.pos, self.panelList)
+        self.pressUiElements(event.pos, self.touchAreaList)
         return True
 
     def handleMouseButtonUp(self, event):
-        self.unpressButton(event.pos)
-        if self.touchAreaHitTest(event.pos):
+        self.unpressUiElements(event.pos, self.buttonList)
+        self.unpressUiElements(event.pos, self.panelList)
+
+        # For now, clicking a touch area will end the program
+        if self.getHitUiElement(event.pos, self.touchAreaList) is not None:
             return False
+
         return True
 
-    def pressButton(self, mousePos):
-        button = self.getHitButton(mousePos)
-        if button is not None:
-            button.setPressed()
-            button.draw(self.pygame, self.screen)
+    def pressUiElements(self, mousePos, uiElementList):
+        uiElement = self.getHitUiElement(mousePos, uiElementList)
+        if uiElement is not None:
+            uiElement.setPressed()
+            uiElement.draw(self.pygame, self.screen)
 
-    def unpressButton(self, mousePos):
-        button = self.getHitButton(mousePos)
-        if button is not None:
-            button.setNormal()
-            button.draw(self.pygame, self.screen)
-            button.onClicked()
+    def unpressUiElements(self, mousePos, uiElementList):
+        uiElement = self.getHitUiElement(mousePos, uiElementList)
+        if uiElement is not None:
+            uiElement.setNormal()
+            uiElement.draw(self.pygame, self.screen)
 
-    def getHitButton(self, mousePos):
-        for button in self.buttonList:
-            if self.pointInElement(mousePos, button):
-                return button
+            if isinstance(uiElement, Button):
+                uiElement.onClicked()
 
-        return None
-
-    def getHitTouchArea(self, mousePos):
-        for touchArea in self.touchAreaList:
-            if self.pointInElement(mousePos, touchArea):
-                return touchArea
+    def getHitUiElement(self, mousePos, uiElementList):
+        for uiElement in uiElementList:
+            if self.pointInElement(mousePos, uiElement):
+                return uiElement
 
         return None
-
-    def touchAreaHitTest(self, mousePos):
-        touchArea = self.getHitTouchArea(mousePos)
-        if touchArea is not None:
-            return True
-        else:
-            return False
 
     def pointInElement(self, pos, uiElement):
         """ Determines if the given point is contained in the given element. """

@@ -10,8 +10,8 @@ GRAY = 120, 120, 120
 
 
 class TimePanel(UiPanel):
-    def __init__(self, x, y, width, height, borderWidth):
-        super(TimePanel, self).__init__(x, y, width, height, True, borderWidth)
+    def __init__(self, x, y, width, height, borderWidth, unpressedBackground, pressedBackground):
+        super(TimePanel, self).__init__(x, y, width, height, True, borderWidth, unpressedBackground, pressedBackground)
 
     def draw(self, pygame, screen):
         super(TimePanel, self).draw(pygame, screen)
@@ -22,3 +22,9 @@ class TimePanel(UiPanel):
 
     def timeString(self):
         return datetime.datetime.now().strftime('%H:%M')
+
+    def setNormal(self):
+        super(TimePanel, self).setNormal()
+
+    def setPressed(self):
+        super(TimePanel, self).setPressed()

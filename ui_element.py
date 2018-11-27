@@ -23,3 +23,11 @@ class UiElement:
     def draw(self, pygame, screen):
         if self.borderWidth > 0:
             pygame.draw.rect(screen, (255, 255, 255), self.rect, self.borderWidth)
+
+    def setNormal(self):
+        """ To be overridden by subclasses. """
+        pass
+
+    def setPressed(self):
+        """ To be overridden by subclasses. """
+        pass

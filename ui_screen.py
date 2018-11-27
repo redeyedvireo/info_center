@@ -55,11 +55,7 @@ class UiScreen:
     def handleMouseButtonUp(self, event):
         self.unpressUiElements(event.pos, self.buttonList)
         self.unpressUiElements(event.pos, self.panelList)
-
-        # For now, clicking a touch area will end the program
-        if self.getHitUiElement(event.pos, self.touchAreaList) is not None:
-            return False
-
+        self.unpressUiElements(event.pos, self.touchAreaList)
         return True
 
     def pressUiElements(self, mousePos, uiElementList):
@@ -74,7 +70,7 @@ class UiScreen:
             uiElement.setNormal()
             uiElement.draw(self.pygame, self.screen)
 
-            if isinstance(uiElement, Button):
+            if isinstance(uiElement, Button) or isinstance(uiElement, TouchArea):
                 uiElement.onClicked()
 
     def getHitUiElement(self, mousePos, uiElementList):

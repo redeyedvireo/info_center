@@ -14,11 +14,16 @@ class TouchArea(UiElement):
     #  - onClicked - when button is clicked (pressed, then unpressed)
     #  - onPressed - when button pressed (ie, pushed in)
     #  - onReleased - when button released
-    def __init__(self, x, y, width, height, borderWidth):
+    def __init__(self, x, y, width, height, borderWidth, onClickedFunc):
         super(TouchArea, self).__init__(x, y, width, height, borderWidth)
+        self.onClickedFunc = onClickedFunc
 
     def setNormal(self):
         pass
 
     def setPressed(self):
         pass
+
+    def onClicked(self):
+        if self.onClickedFunc is not None:
+            self.onClickedFunc()

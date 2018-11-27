@@ -22,10 +22,16 @@ BLACK = 0, 0, 0
 BLUE = 0, 0, 255
 RED = 255, 0, 0
 
+continueRunning = True
+
 
 def backToMainScreen(uiManager):
     print("Yet another button clicked")
     uiManager.displayScreen("main")
+
+def stopApp():
+    global continueRunning
+    continueRunning = False
 
 def mainLoop():
     pygame.init()
@@ -56,7 +62,7 @@ def mainLoop():
     mainScreen.addElement(testButton)
 
     # Create a Touch Area
-    testTouchArea = TouchArea(0, 450, 800, 30, 1)
+    testTouchArea = TouchArea(0, 450, 800, 30, 1, lambda : stopApp())
     mainScreen.addElement(testTouchArea)
 
     # Create a Button Strip
@@ -97,7 +103,7 @@ def mainLoop():
 
     uiManager.displayScreen("main")
 
-    while 1:
+    while continueRunning:
         for event in pygame.event.get():
             if uiManager.handleEvents(event):
                 pygame.display.update()

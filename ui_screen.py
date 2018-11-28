@@ -83,3 +83,15 @@ class UiScreen:
     def pointInElement(self, pos, uiElement):
         """ Determines if the given point is contained in the given element. """
         return uiElement.rect.collidepoint(pos)
+
+    def updateUiElements(self):
+        """ Updates all UI Elements.  This is called on a periodic basis from the app.
+            This is used to update UI elements with dynamic content, ie, content
+            that changes at times other than when the user interacts with it. """
+        self.invokeUpdateOnUiElements(self.buttonList)
+        self.invokeUpdateOnUiElements(self.panelList)
+        self.invokeUpdateOnUiElements(self.touchAreaList)
+
+    def invokeUpdateOnUiElements(self, uiElementList):
+        for uiElement in uiElementList:
+            uiElement.update(self.pygame, self.screen)

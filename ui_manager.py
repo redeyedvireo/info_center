@@ -45,3 +45,6 @@ class UiManager:
             return self.currentScreen.handleMouseButtonUp(event)
         else:
             return True
+
+    def updateUiElements(self):
+        self.currentScreen.updateUiElements()

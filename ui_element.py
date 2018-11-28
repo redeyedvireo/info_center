@@ -31,3 +31,7 @@ class UiElement:
     def setPressed(self):
         """ To be overridden by subclasses. """
         pass
+
+    def update(self, pygame, screen):
+        """ Updates the UI element.  Subclasses can override as needed. """
+        pass

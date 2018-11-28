@@ -22,6 +22,8 @@ BLACK = 0, 0, 0
 BLUE = 0, 0, 255
 RED = 255, 0, 0
 
+ONE_SECOND_EVENT = USEREVENT + 1
+
 continueRunning = True
 
 
@@ -39,6 +41,7 @@ def mainLoop():
     size = width, height = 800, 480
     # screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
     screen = pygame.display.set_mode(size)
+    pygame.time.set_timer(ONE_SECOND_EVENT, 1000)
     pygame.display.set_caption("Info Center")
 
     # JAG: Test fullscreen
@@ -58,7 +61,7 @@ def mainLoop():
     mainScreen = UiScreen(pygame, screen)
 
     # Create a button
-    testButton = Button.createSolidButton(600, 100, 80, 80, (50, 100, 190), (200, 30, 140), lambda: uiManager.displayScreen("second"))
+    testButton = Button.createSolidButton(600, 200, 80, 80, (50, 100, 190), (200, 30, 140), lambda: uiManager.displayScreen("second"))
     mainScreen.addElement(testButton)
 
     # Create a Touch Area
@@ -89,7 +92,8 @@ def mainLoop():
     mainScreen.addElement(testVerticalButtonStrip)
 
     # Create a TimePanel
-    timePanel = TimePanel(0, 0, 410, 150, 1, GREEN, BLUE)
+    #timePanel = TimePanel(0, 0, 410, 150, 1, GREEN, BLUE)
+    timePanel = TimePanel(0, 0, 630, 150, 1, GREEN, BLUE)       # This width is temporary
 
     mainScreen.addElement(timePanel)
 
@@ -105,6 +109,9 @@ def mainLoop():
 
     while continueRunning:
         for event in pygame.event.get():
+            if event.type == ONE_SECOND_EVENT:
+                uiManager.updateUiElements()
+
             if uiManager.handleEvents(event):
                 pygame.display.update()
 

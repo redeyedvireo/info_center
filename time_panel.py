@@ -12,17 +12,27 @@ GRAY = 120, 120, 120
 class TimePanel(UiPanel):
     def __init__(self, x, y, width, height, borderWidth, unpressedBackground, pressedBackground):
         super(TimePanel, self).__init__(x, y, width, height, True, borderWidth, unpressedBackground, pressedBackground)
-        self.currentTimeStr = self.timeString()
-        self.previousTimeStr = ""
+        self.currentHoursMinutesStr, self.currentSecondsStr = self.timeString()
+        self.previousHoursMinutesStr = ""
+        self.previousSecondsStr = ""
 
     def draw(self, pygame, screen):
         super(TimePanel, self).draw(pygame, screen)
         font = pygame.font.Font(None, 220)
-        fontimg = font.render(self.currentTimeStr, 1, GRAY)
+        fontimg = font.render(self.currentHoursMinutesStr, 1, GRAY)
         screen.blit(fontimg, self.pos())
+        smallerFont = pygame.font.Font(None, 100)
+        secondsImage = smallerFont.render(self.currentSecondsStr, 1, GRAY)
+        curPosX, curPosY = self.pos()
+        #newPos = curPosX + 400, curPosY + 10       # Hang the seconds at the top
+        newPos = curPosX + 400, curPosY + 68        # Drop the seconds at the bottom
+        screen.blit(secondsImage, newPos)
 
     def timeString(self):
-        return datetime.datetime.now().strftime('%H:%M:%S')
+        """ Returns the time as a tuple of the form:
+            (HH:MM, SS). """
+        curTime = datetime.datetime.now()
+        return curTime.strftime('%H:%M'), curTime.strftime('%S')
 
     def setNormal(self):
         super(TimePanel, self).setNormal()
@@ -32,9 +42,11 @@ class TimePanel(UiPanel):
 
     def update(self, pygame, screen):
         """ Updates the time.  Redraws, as necessary. """
-        tempTimeStr = self.timeString()
+        tempHoursMinutesStr, tempSecondsStr = self.timeString()
 
-        if tempTimeStr != self.currentTimeStr:
-            self.previousTimeStr = self.currentTimeStr
-            self.currentTimeStr = tempTimeStr
+        if tempSecondsStr != self.currentSecondsStr:
+            self.previousHoursMinutesStr = self.currentSecondsStr
+            self.previousSecondsStr = tempSecondsStr
+            self.currentHoursMinutesStr = tempHoursMinutesStr
+            self.currentSecondsStr = tempSecondsStr
             self.draw(pygame, screen)

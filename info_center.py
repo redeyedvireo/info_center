@@ -92,8 +92,7 @@ def mainLoop():
     mainScreen.addElement(testVerticalButtonStrip)
 
     # Create a TimePanel
-    #timePanel = TimePanel(0, 0, 410, 150, 1, GREEN, BLUE)
-    timePanel = TimePanel(0, 0, 630, 150, 1, GREEN, BLUE)       # This width is temporary
+    timePanel = TimePanel(0, 0, 500, 150, 1, GREEN, BLUE)
 
     mainScreen.addElement(timePanel)
 

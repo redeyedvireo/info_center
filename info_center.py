@@ -15,8 +15,8 @@ from button_strip import ButtonStrip
 from time_panel import TimePanel
 
 WHITE = 255, 255, 255
-#GRAY = 20, 20, 20
-GRAY = 120, 120, 120
+GRAY = 20, 20, 20
+#GRAY = 120, 120, 120
 GREEN = 0, 255, 0
 BLACK = 0, 0, 0
 BLUE = 0, 0, 255
@@ -39,8 +39,8 @@ def mainLoop():
     pygame.init()
 
     size = width, height = 800, 480
-    # screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
-    screen = pygame.display.set_mode(size)
+    screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
+    # screen = pygame.display.set_mode(size)
     pygame.time.set_timer(ONE_SECOND_EVENT, 1000)
     pygame.display.set_caption("Info Center")
 
@@ -92,7 +92,7 @@ def mainLoop():
     mainScreen.addElement(testVerticalButtonStrip)
 
     # Create a TimePanel
-    timePanel = TimePanel(0, 0, 500, 150, 1, GREEN, BLUE)
+    timePanel = TimePanel(0, 0, 500, 150, 1, BLACK, BLUE)
 
     mainScreen.addElement(timePanel)
 

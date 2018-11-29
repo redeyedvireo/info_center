@@ -5,8 +5,8 @@
 import datetime
 from ui_panel import UiPanel
 
-# GRAY = 20, 20, 20
-GRAY = 120, 120, 120
+GRAY = 80, 80, 80
+# GRAY = 120, 120, 120
 
 
 class TimePanel(UiPanel):
@@ -25,7 +25,8 @@ class TimePanel(UiPanel):
         secondsImage = smallerFont.render(self.currentSecondsStr, 1, GRAY)
         curPosX, curPosY = self.pos()
         #newPos = curPosX + 400, curPosY + 10       # Hang the seconds at the top
-        newPos = curPosX + 400, curPosY + 68        # Drop the seconds at the bottom
+        # newPos = curPosX + 400, curPosY + 68        # Drop the seconds at the bottom
+        newPos = curPosX + fontimg.get_width() + 4, curPosY + 68 
         screen.blit(secondsImage, newPos)
 
     def timeString(self):

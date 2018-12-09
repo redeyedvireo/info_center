@@ -5,6 +5,7 @@
 # A UI for viewing information about the environment.
 
 import os, sys
+import subprocess
 import pygame
 from pygame.locals import *
 from ui_manager import UiManager
@@ -34,6 +35,15 @@ def backToMainScreen(uiManager):
 def stopApp():
     global continueRunning
     continueRunning = False
+
+def turnOffBacklight():
+    print("Attempting to turn off backlight")
+    command1 = "echo 1"
+    command2 = "/usr/bin/sudo /usr/bin/tee /sys/class/backlight/rpi_backlight/bl_power"
+    process1 = subprocess.Popen(command1.split(), stdout=subprocess.PIPE)
+    process2 = subprocess.Popen(command2.split(), stdin=process1.stdout, stdout=subprocess.PIPE)
+    output = process2.communicate()[0]
+    print(output)
 
 def mainLoop():
     pygame.init()
@@ -90,6 +100,10 @@ def mainLoop():
 
     mainScreen.addElement(testButtonStrip)
     mainScreen.addElement(testVerticalButtonStrip)
+
+    # Add "Screen Off" button
+    screenOffButton = Button.createSolidButton(759, 399, 40, 40, GREEN, BLUE, lambda: turnOffBacklight())
+    mainScreen.addElement(screenOffButton)
 
     # Create a TimePanel
     timePanel = TimePanel(0, 0, 500, 150, 1, BLACK, BLUE)

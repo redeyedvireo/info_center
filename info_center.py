@@ -70,12 +70,25 @@ def mainLoop(windowedMode):
     mainScreen = UiScreen(pygame, screen)
 
     # Create a button
-    testButton = Button.createSolidButton(600, 200, 80, 80, (50, 100, 190), (200, 30, 140), lambda: uiManager.displayScreen("second"))
+    testButton = Button.createSolidButton(719, 0, 80, 80, (50, 100, 190), (200, 30, 140), lambda: uiManager.displayScreen("second"))
     mainScreen.addElement(testButton)
 
     # Create a Touch Area
     testTouchArea = TouchArea(0, 450, 800, 30, 1, lambda : stopApp())
     mainScreen.addElement(testTouchArea)
+
+    # Create a TimePanel
+    timePanel = TimePanel(0, 0, 500, 150, 1, BLACK, BLUE)
+
+    mainScreen.addElement(timePanel)
+
+    uiManager.addScreen("main", mainScreen)
+
+    # Create a second screen
+    secondScreen = UiScreen(pygame, screen)
+    secondScreenButton = Button.createSolidButton(599, 0, 100, 100, BLUE, GREEN, lambda : backToMainScreen(uiManager))
+    secondScreen.addElement(secondScreenButton)
+    uiManager.addScreen("second", secondScreen)
 
     # Create a Button Strip
     testButtonStrip = ButtonStrip(0, 350, ButtonStrip.HORIZONTAL, 25)
@@ -97,25 +110,12 @@ def mainLoop(windowedMode):
     testVerticalButtonStrip.addButton(button5)
     testVerticalButtonStrip.addButton(button6)
 
-    mainScreen.addElement(testButtonStrip)
-    mainScreen.addElement(testVerticalButtonStrip)
+    secondScreen.addElement(testButtonStrip)
+    secondScreen.addElement(testVerticalButtonStrip)
 
     # Add "Screen Off" button
     screenOffButton = Button.createSolidButton(759, 399, 40, 40, GREEN, BLUE, lambda: turnOffBacklight())
-    mainScreen.addElement(screenOffButton)
-
-    # Create a TimePanel
-    timePanel = TimePanel(0, 0, 500, 150, 1, BLACK, BLUE)
-
-    mainScreen.addElement(timePanel)
-
-    uiManager.addScreen("main", mainScreen)
-
-    # Create a second screen
-    secondScreen = UiScreen(pygame, screen)
-    secondScreenButton = Button.createSolidButton(400, 240, 100, 100, BLUE, GREEN, lambda : backToMainScreen(uiManager))
-    secondScreen.addElement(secondScreenButton)
-    uiManager.addScreen("second", secondScreen)
+    secondScreen.addElement(screenOffButton)
 
     uiManager.displayScreen("main")
 

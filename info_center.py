@@ -4,7 +4,8 @@
 # info_center.py
 # A UI for viewing information about the environment.
 
-import os, sys
+import sys
+from optparse import OptionParser
 import pygame
 from pygame.locals import *
 from ui_manager import UiManager
@@ -35,12 +36,15 @@ def stopApp():
     global continueRunning
     continueRunning = False
 
-def mainLoop():
+def mainLoop(windowedMode):
     pygame.init()
 
     size = width, height = 800, 480
-    # screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
-    screen = pygame.display.set_mode(size)
+    if windowedMode == True:
+        screen = pygame.display.set_mode(size)
+    else:
+        screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
+
     pygame.time.set_timer(ONE_SECOND_EVENT, 1000)
     pygame.display.set_caption("Info Center")
 
@@ -138,4 +142,9 @@ def mainLoop():
 
 # ---------------------------------------------------------------
 if __name__ == "__main__":
-    mainLoop()
+    parser = OptionParser()
+    parser.add_option("-w", "--windowed", action="store_true", default="False", dest="windowed", help="Use windowed mode instead of full-screen")
+
+
+    (options, args) = parser.parse_args()
+    mainLoop(options.windowed)

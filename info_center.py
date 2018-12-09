@@ -6,6 +6,7 @@
 
 import sys
 from optparse import OptionParser
+import subprocess
 import pygame
 from pygame.locals import *
 from ui_manager import UiManager
@@ -16,8 +17,8 @@ from button_strip import ButtonStrip
 from time_panel import TimePanel
 
 WHITE = 255, 255, 255
-#GRAY = 20, 20, 20
-GRAY = 120, 120, 120
+GRAY = 20, 20, 20
+#GRAY = 120, 120, 120
 GREEN = 0, 255, 0
 BLACK = 0, 0, 0
 BLUE = 0, 0, 255
@@ -36,6 +37,15 @@ def stopApp():
     global continueRunning
     continueRunning = False
 
+def turnOffBacklight():
+    print("Attempting to turn off backlight")
+    command1 = "echo 1"
+    command2 = "/usr/bin/sudo /usr/bin/tee /sys/class/backlight/rpi_backlight/bl_power"
+    process1 = subprocess.Popen(command1.split(), stdout=subprocess.PIPE)
+    process2 = subprocess.Popen(command2.split(), stdin=process1.stdout, stdout=subprocess.PIPE)
+    output = process2.communicate()[0]
+    print(output)
+
 def mainLoop(windowedMode):
     pygame.init()
 
@@ -47,11 +57,6 @@ def mainLoop(windowedMode):
 
     pygame.time.set_timer(ONE_SECOND_EVENT, 1000)
     pygame.display.set_caption("Info Center")
-
-    # JAG: Test fullscreen
-    # pygame.display.toggle_fullscreen()
-
-    # Now we draw onto a new surface, and blit the result to the screen
 
     # Create myimage and set transparency to top left pixel
     newsurface = pygame.Surface((80,80))
@@ -95,8 +100,12 @@ def mainLoop(windowedMode):
     mainScreen.addElement(testButtonStrip)
     mainScreen.addElement(testVerticalButtonStrip)
 
+    # Add "Screen Off" button
+    screenOffButton = Button.createSolidButton(759, 399, 40, 40, GREEN, BLUE, lambda: turnOffBacklight())
+    mainScreen.addElement(screenOffButton)
+
     # Create a TimePanel
-    timePanel = TimePanel(0, 0, 500, 150, 1, GREEN, BLUE)
+    timePanel = TimePanel(0, 0, 500, 150, 1, BLACK, BLUE)
 
     mainScreen.addElement(timePanel)
 

@@ -24,18 +24,12 @@ BLACK = 0, 0, 0
 BLUE = 0, 0, 255
 RED = 255, 0, 0
 
-ONE_SECOND_EVENT = USEREVENT + 1
-
-continueRunning = True
 
 
 def backToMainScreen(uiManager):
     print("Yet another button clicked")
     uiManager.displayScreen("main")
 
-def stopApp():
-    global continueRunning
-    continueRunning = False
 
 def turnOffBacklight():
     print("Attempting to turn off backlight")
@@ -50,12 +44,11 @@ def mainLoop(windowedMode):
     pygame.init()
 
     size = width, height = 800, 480
-    if windowedMode == True:
+    if windowedMode:
         screen = pygame.display.set_mode(size)
     else:
         screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
 
-    pygame.time.set_timer(ONE_SECOND_EVENT, 1000)
     pygame.display.set_caption("Info Center")
 
     # Create myimage and set transparency to top left pixel
@@ -74,7 +67,7 @@ def mainLoop(windowedMode):
     mainScreen.addElement(testButton)
 
     # Create a Touch Area
-    testTouchArea = TouchArea(0, 450, 800, 30, 1, lambda : stopApp())
+    testTouchArea = TouchArea(0, 450, 800, 30, 1, lambda : uiManager.terminate())
     mainScreen.addElement(testTouchArea)
 
     # Create a TimePanel
@@ -119,41 +112,13 @@ def mainLoop(windowedMode):
 
     uiManager.displayScreen("main")
 
-    while continueRunning:
-        for event in pygame.event.get():
-            if event.type == ONE_SECOND_EVENT:
-                uiManager.updateUiElements()
-
-            if uiManager.handleEvents(event):
-                pygame.display.update()
-
-                # TODO: Determine if a delay is necessary here.  Does lack of a delay cause a CPU spike?
-                pygame.time.delay(200)
-            else:
-                pygame.display.quit()
-                sys.exit(0)
-
-    # while 1:
-    #     for event in pygame.event.get():
-    #         if event.type == pygame.QUIT:
-    #             pygame.display.quit()
-    #             sys.exit(0)
-    #         elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-    #             pygame.display.quit()
-    #             sys.exit(0)
-    #         elif event.type == pygame.MOUSEBUTTONUP:
-    #             pygame.display.quit()
-    #             sys.exit(0)
-    #         else:
-    #             pygame.display.update()
-    #             pygame.time.delay(500)
+    uiManager.run()
 
 
 # ---------------------------------------------------------------
 if __name__ == "__main__":
     parser = OptionParser()
-    parser.add_option("-w", "--windowed", action="store_true", default="False", dest="windowed", help="Use windowed mode instead of full-screen")
-
+    parser.add_option("-w", "--windowed", action="store_true", default=False, dest="windowed", help="Use windowed mode instead of full-screen")
 
     (options, args) = parser.parse_args()
     mainLoop(options.windowed)

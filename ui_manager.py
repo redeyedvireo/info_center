@@ -6,6 +6,8 @@
 # called when the user interacts with them.
 
 import pygame
+from ui_timer import UiTimer
+
 
 class UiManager:
     def __init__(self, pygame, screen):
@@ -18,6 +20,9 @@ class UiManager:
         # A map of screen IDs to UiScreen objects.
         self.screenMap = {}
 
+        # User timers.
+        self.timers = []
+
         self.currentScreen = None
         self.continueRunning = True
 
@@ -29,6 +34,23 @@ class UiManager:
         self.screen.fill((0, 0, 0))
         self.currentScreen.display()
 
+    def setTimer(self, seconds=None, minutes=None, hours=None, callback=None):
+        """ Sets a timer, that triggers for the given time interval.  The time inverval is specified as
+            follows:
+                - if seconds are specified, that is used for the interval.
+                - next, minutes are checked, and if specified, minutes are used to specify the interval.
+                - finally, hours are checked, and if specified, hours are used to specify the interval.
+                - callback specifies a function to call when the timer is triggered. """
+        timerInterval = 0       # Seconds
+        if seconds is not None:
+            timerInterval = seconds
+        elif minutes is not None:
+            timerInterval = minutes * 60
+        elif hours is not None:
+            timerInterval = hours * 3600
+
+        if timerInterval > 0 and callback is not None:
+            self.timers.append( UiTimer(timerInterval, callback) )
 
     # This should probably return a code that indicates whether the app
     # should change its status, such as to quit, or blank the screen, etc.
@@ -48,6 +70,10 @@ class UiManager:
     def updateUiElements(self):
         self.currentScreen.updateUiElements()
 
+    def updateTimers(self):
+        for timer in self.timers:
+            timer.tick()
+
     def terminate(self):
         """ Stops the event loop. """
         self.continueRunning = False
@@ -62,6 +88,7 @@ class UiManager:
             for event in pygame.event.get():
                 if event.type == self.ONE_SECOND_EVENT:
                     self.updateUiElements()
+                    self.updateTimers()
 
                 if self.handleEvents(event):
                     pygame.display.update()

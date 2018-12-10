@@ -112,6 +112,12 @@ def mainLoop(windowedMode):
 
     uiManager.displayScreen("main")
 
+    # Add some timers
+    # uiManager.setTimer(seconds=2, callback=lambda: print("2-second timer triggered."))
+    # uiManager.setTimer(seconds=5, callback=lambda: print("5-second timer triggered."))
+    # uiManager.setTimer(seconds=9, callback=lambda: print("9-second timer triggered."))
+    # uiManager.setTimer(minutes=1, callback=lambda: print("1-minute timer triggered."))
+
     uiManager.run()
 
 

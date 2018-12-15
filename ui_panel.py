@@ -18,6 +18,12 @@ class UiPanel(UiElement):
         self.pressedBackground = pressedBackground
         self.state = self.STATE_UNPRESSED
 
+    def init(self, uiManager):
+        """ Callback where initialization can happen.  This would include more time-consuming tasks such
+            as fetching data from the network, or loading files from disk.  Subclasses will override this
+            as needed. """
+        pass
+
     def draw(self, pygame, screen):
         super(UiPanel, self).draw(pygame, screen)
 

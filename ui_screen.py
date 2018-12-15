@@ -10,8 +10,9 @@ from ui_panel import UiPanel
 
 
 class UiScreen:
-    def __init__(self, pygame, screen):
+    def __init__(self, uiManager, pygame, screen):
         super(UiScreen, self).__init__()
+        self.uiManager = uiManager
         self.pygame = pygame
         self.screen = screen        # pygame screen
 
@@ -45,6 +46,7 @@ class UiScreen:
                 self.addElement(button)
         elif isinstance(uiElement, UiPanel):
             self.panelList.append(uiElement)
+            uiElement.init(self.uiManager)
 
     def handleMouseButtonDown(self, event):
         self.pressUiElements(event.pos, self.buttonList)

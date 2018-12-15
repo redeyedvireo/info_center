@@ -7,6 +7,7 @@
 
 import pygame
 from ui_timer import UiTimer
+from ui_screen import UiScreen
 
 
 class UiManager:
@@ -26,8 +27,10 @@ class UiManager:
         self.currentScreen = None
         self.continueRunning = True
 
-    def addScreen(self, id, uiScreen):
+    def addScreen(self, id):
+        uiScreen = UiScreen(self, self.pygame, self.screen)
         self.screenMap[id] = uiScreen
+        return uiScreen
 
     def displayScreen(self, id):
         self.currentScreen = self.screenMap[id]

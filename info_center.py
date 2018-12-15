@@ -4,17 +4,17 @@
 # info_center.py
 # A UI for viewing information about the environment.
 
-import sys
 from optparse import OptionParser
 import subprocess
 import pygame
+import configparser
 from pygame.locals import *
 from ui_manager import UiManager
-from ui_screen import UiScreen
 from button import Button
 from touch_area import TouchArea
 from button_strip import ButtonStrip
 from time_panel import TimePanel
+from weather_panel import WeatherPanel
 
 WHITE = 255, 255, 255
 GRAY = 20, 20, 20
@@ -24,6 +24,7 @@ BLACK = 0, 0, 0
 BLUE = 0, 0, 255
 RED = 255, 0, 0
 
+CONFIG_FILE = 'info_center.ini'
 
 
 def backToMainScreen(uiManager):
@@ -40,8 +41,16 @@ def turnOffBacklight():
     output = process2.communicate()[0]
     print(output)
 
+def readConfig():
+    """ Reads the config file.  For now, only the weather config is returned. """
+    config = configparser.ConfigParser()
+    config.read(CONFIG_FILE)
+    return (config['weather']['zipcode'], config['weather']['appid'])
+
 def mainLoop(windowedMode):
     pygame.init()
+
+    zipcode, weatherAppId = readConfig()
 
     size = width, height = 800, 480
     if windowedMode:
@@ -60,7 +69,7 @@ def mainLoop(windowedMode):
     uiManager = UiManager(pygame, screen)
 
     # Create the main screen
-    mainScreen = UiScreen(pygame, screen)
+    mainScreen = uiManager.addScreen("main")
 
     # Create a button
     testButton = Button.createSolidButton(719, 0, 80, 80, (50, 100, 190), (200, 30, 140), lambda: uiManager.displayScreen("second"))
@@ -73,15 +82,18 @@ def mainLoop(windowedMode):
     # Create a TimePanel
     timePanel = TimePanel(0, 0, 500, 150, 1, BLACK, BLUE)
 
-    mainScreen.addElement(timePanel)
+    # Create a WeatherPanel
+    # TODO: Ideally, the WeatherPanel should set its own size
+    weatherPanel = WeatherPanel(0, 170, 300, 250, 2, BLACK, BLUE, appid=weatherAppId, zipcode=zipcode)
 
-    uiManager.addScreen("main", mainScreen)
+    mainScreen.addElement(timePanel)
+    mainScreen.addElement(weatherPanel)
 
     # Create a second screen
-    secondScreen = UiScreen(pygame, screen)
+    secondScreen = uiManager.addScreen("second")
+
     secondScreenButton = Button.createSolidButton(599, 0, 100, 100, BLUE, GREEN, lambda : backToMainScreen(uiManager))
     secondScreen.addElement(secondScreenButton)
-    uiManager.addScreen("second", secondScreen)
 
     # Create a Button Strip
     testButtonStrip = ButtonStrip(0, 350, ButtonStrip.HORIZONTAL, 25)

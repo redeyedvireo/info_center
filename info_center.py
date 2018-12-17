@@ -41,6 +41,15 @@ def turnOffBacklight():
     output = process2.communicate()[0]
     print(output)
 
+def turnOnBackight():
+    print("Attempting to turn on backlight")
+    command1 = "echo 0"
+    command2 = "/usr/bin/sudo /usr/bin/tee /sys/class/backlight/rpi_backlight/bl_power"
+    process1 = subprocess.Popen(command1.split(), stdout=subprocess.PIPE)
+    process2 = subprocess.Popen(command2.split(), stdin=process1.stdout, stdout=subprocess.PIPE)
+    output = process2.communicate()[0]
+    print(output)
+
 def readConfig():
     """ Reads the config file.  For now, only the weather config is returned. """
     config = configparser.ConfigParser()
@@ -121,6 +130,10 @@ def mainLoop(windowedMode):
     # Add "Screen Off" button
     screenOffButton = Button.createSolidButton(759, 399, 40, 40, GREEN, BLUE, lambda: turnOffBacklight())
     secondScreen.addElement(screenOffButton)
+    
+    # Add "Screen On" button
+    screenOnButton = Button.createSolidButton(715, 399, 40, 40, BLUE, GREEN, lambda: turnOnBackight())
+    secondScreen.addElement(screenOnButton)
 
     uiManager.displayScreen("main")
 

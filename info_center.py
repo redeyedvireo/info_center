@@ -4,12 +4,12 @@
 # info_center.py
 # A UI for viewing information about the environment.
 
-from optparse import OptionParser
-import subprocess
+import argparse
 import pygame
 import configparser
 from pygame.locals import *
 from ui_manager import UiManager
+from ui_backlight_controller import UiBacklightController
 from button import Button
 from touch_area import TouchArea
 from button_strip import ButtonStrip
@@ -31,32 +31,13 @@ def backToMainScreen(uiManager):
     print("Yet another button clicked")
     uiManager.displayScreen("main")
 
-
-def turnOffBacklight():
-    print("Attempting to turn off backlight")
-    command1 = "echo 1"
-    command2 = "/usr/bin/sudo /usr/bin/tee /sys/class/backlight/rpi_backlight/bl_power"
-    process1 = subprocess.Popen(command1.split(), stdout=subprocess.PIPE)
-    process2 = subprocess.Popen(command2.split(), stdin=process1.stdout, stdout=subprocess.PIPE)
-    output = process2.communicate()[0]
-    print(output)
-
-def turnOnBackight():
-    print("Attempting to turn on backlight")
-    command1 = "echo 0"
-    command2 = "/usr/bin/sudo /usr/bin/tee /sys/class/backlight/rpi_backlight/bl_power"
-    process1 = subprocess.Popen(command1.split(), stdout=subprocess.PIPE)
-    process2 = subprocess.Popen(command2.split(), stdin=process1.stdout, stdout=subprocess.PIPE)
-    output = process2.communicate()[0]
-    print(output)
-
 def readConfig():
     """ Reads the config file.  For now, only the weather config is returned. """
     config = configparser.ConfigParser()
     config.read(CONFIG_FILE)
     return (config['weather']['zipcode'], config['weather']['appid'])
 
-def mainLoop(windowedMode):
+def mainLoop(windowedMode, noBacklight):
     pygame.init()
 
     zipcode, weatherAppId = readConfig()
@@ -75,7 +56,12 @@ def mainLoop(windowedMode):
     ckey = myimage.get_at((0,0))
     myimage.set_colorkey(ckey, RLEACCEL)
 
-    uiManager = UiManager(pygame, screen)
+    backlightController = UiBacklightController()
+
+    backlightController.disabled = noBacklight
+
+    uiManager = UiManager(pygame, screen, backlightController)
+    uiManager.init()
 
     # Create the main screen
     mainScreen = uiManager.addScreen("main")
@@ -128,11 +114,11 @@ def mainLoop(windowedMode):
     secondScreen.addElement(testVerticalButtonStrip)
 
     # Add "Screen Off" button
-    screenOffButton = Button.createSolidButton(759, 399, 40, 40, GREEN, BLUE, lambda: turnOffBacklight())
+    screenOffButton = Button.createSolidButton(759, 399, 40, 40, GREEN, BLUE, lambda: uiManager.turnOffBacklight())
     secondScreen.addElement(screenOffButton)
     
     # Add "Screen On" button
-    screenOnButton = Button.createSolidButton(715, 399, 40, 40, BLUE, GREEN, lambda: turnOnBackight())
+    screenOnButton = Button.createSolidButton(715, 399, 40, 40, BLUE, GREEN, lambda: uiManager.turnOnBackight())
     secondScreen.addElement(screenOnButton)
 
     uiManager.displayScreen("main")
@@ -148,8 +134,9 @@ def mainLoop(windowedMode):
 
 # ---------------------------------------------------------------
 if __name__ == "__main__":
-    parser = OptionParser()
-    parser.add_option("-w", "--windowed", action="store_true", default=False, dest="windowed", help="Use windowed mode instead of full-screen")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-w", "--windowed", action="store_true", default=False, dest="windowed", help="Use windowed mode instead of full-screen")
+    parser.add_argument("--no_backlight", action="store_true", default=False, dest="no_backlight", help="Disable backlight control")
 
-    (options, args) = parser.parse_args()
-    mainLoop(options.windowed)
+    args = parser.parse_args()
+    mainLoop(args.windowed, args.no_backlight)

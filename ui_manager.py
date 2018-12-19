@@ -11,21 +11,25 @@ from ui_screen import UiScreen
 
 
 class UiManager:
-    def __init__(self, pygame, screen):
+    def __init__(self, pygame, screen, backlightController):
         super(UiManager, self).__init__()
         self.ONE_SECOND_EVENT = pygame.USEREVENT + 1
 
         self.pygame = pygame
         self.screen = screen
+        self.backlightController = backlightController
 
         # A map of screen IDs to UiScreen objects.
         self.screenMap = {}
 
         # User timers.
-        self.timers = []
+        self.timers = {}
 
         self.currentScreen = None
         self.continueRunning = True
+
+    def init(self):
+        self.backlightController.init(self)
 
     def addScreen(self, id):
         uiScreen = UiScreen(self, self.pygame, self.screen)
@@ -37,7 +41,13 @@ class UiManager:
         self.screen.fill((0, 0, 0))
         self.currentScreen.display()
 
-    def setTimer(self, seconds=None, minutes=None, hours=None, callback=None):
+    def turnOffBacklight(self):
+        self.backlightController.turnOffBacklight()
+
+    def turnOnBacklight(self):
+        self.backlightController.turnOnBacklight()
+
+    def setTimer(self, timerId, seconds=None, minutes=None, hours=None, callback=None):
         """ Sets a timer, that triggers for the given time interval.  The time inverval is specified as
             follows:
                 - if seconds are specified, that is used for the interval.
@@ -53,7 +63,11 @@ class UiManager:
             timerInterval = hours * 3600
 
         if timerInterval > 0 and callback is not None:
-            self.timers.append( UiTimer(timerInterval, callback) )
+            timer = UiTimer(timerInterval, callback)
+            self.timers[timerId] = timer
+            return timer
+        else:
+            return None
 
     # This should probably return a code that indicates whether the app
     # should change its status, such as to quit, or blank the screen, etc.
@@ -64,9 +78,18 @@ class UiManager:
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             return False
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            return self.currentScreen.handleMouseButtonDown(event)
+            if self.backlightController.isOn():
+                self.backlightController.resetUiTimeout()
+                return self.currentScreen.handleMouseButtonDown(event)
+            else:
+                return True
         elif event.type == pygame.MOUSEBUTTONUP:
-            return self.currentScreen.handleMouseButtonUp(event)
+            if self.backlightController.isOn():
+                return self.currentScreen.handleMouseButtonUp(event)
+            else:
+                # Turn backlight on
+                self.backlightController.turnOnBacklight()
+                return True
         else:
             return True
 
@@ -74,8 +97,11 @@ class UiManager:
         self.currentScreen.updateUiElements()
 
     def updateTimers(self):
-        for timer in self.timers:
+        for timer in self.timers.values():
             timer.tick()
+
+    def getTimer(self, timerId):
+        return self.timers[timerId]
 
     def terminate(self):
         """ Stops the event loop. """

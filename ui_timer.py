@@ -10,9 +10,12 @@ class UiTimer:
         self.interval = timerInterval
         self.callback = callback
 
+        self.reset()
+
+    def reset(self):
         # Keeps track of the current value.  It counts down every tick, and when it reaches 0,
         # the callback function is called.
-        self.currentValue = timerInterval
+        self.currentValue = self.interval
 
     def tick(self):
         """ Initiates a timer tick.  This should be called by the framework every second.

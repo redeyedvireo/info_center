@@ -20,6 +20,8 @@ GRAY = 80, 80, 80
 
 
 class WeatherPanel(UiPanel):
+    WEATHER_TIMER = "weather_timer"
+
     def __init__(self, x, y, width, height, borderWidth, unpressedBackground, pressedBackground, appid, zipcode):
         super(WeatherPanel, self).__init__(x, y, width, height, True, borderWidth, unpressedBackground, pressedBackground)
         self.appid = appid
@@ -38,7 +40,7 @@ class WeatherPanel(UiPanel):
 
     def init(self, uiManager):
         super(WeatherPanel, self).init(uiManager)
-        uiManager.setTimer(minutes=15, callback=self.fetchCurrentConditions)
+        uiManager.setTimer(timerId=self.WEATHER_TIMER, minutes=15, callback=self.fetchCurrentConditions)
         self.fetchCurrentConditions()
 
     def draw(self, pygame, screen):

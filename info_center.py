@@ -118,7 +118,7 @@ def mainLoop(windowedMode, noBacklight):
     secondScreen.addElement(screenOffButton)
     
     # Add "Screen On" button
-    screenOnButton = Button.createSolidButton(715, 399, 40, 40, BLUE, GREEN, lambda: uiManager.turnOnBackight())
+    screenOnButton = Button.createSolidButton(715, 399, 40, 40, BLUE, GREEN, lambda: uiManager.turnOnBacklight())
     secondScreen.addElement(screenOnButton)
 
     uiManager.displayScreen("main")

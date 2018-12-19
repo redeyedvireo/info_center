@@ -21,7 +21,7 @@ class UiBacklightController:
         # Set a timer to turn off the backlight after a period of time.
         # TODO: Will need to reset the timer whenever there is user activity
         #self.uiManager.setTimer(timerId=self.BACKLIGHT_TIMER_ID, minutes=3, callback=self.turnOffBacklight)
-        self.uiManager.setTimer(timerId=self.BACKLIGHT_TIMER_ID, seconds=8, callback=self.turnOffBacklight)     # For debugging
+        self.uiManager.setTimer(timerId=self.BACKLIGHT_TIMER_ID, seconds=30, callback=self.turnOffBacklight)     # For debugging
 
     def resetUiTimeout(self):
         timer = self.uiManager.getTimer(self.BACKLIGHT_TIMER_ID)
@@ -55,3 +55,9 @@ class UiBacklightController:
         else:
             print("Backlight is ON")
             self.currentState = self.ON
+
+    def syncBacklightState(self):
+        with open("/sys/class/backlight/rpi_backlight/bl_power", "r") as f:
+            val = int(f.read())
+            self.currentState = self.ON if val == 0 else self.OFF
+

@@ -56,7 +56,7 @@ class WeatherPanel(UiPanel):
         # Use UiLayout
         layout = UiLayout(self.rect, 5)
         layout.start()
-        layout.addItem(UiTextLayoutItem(layout, UiAlignment.RIGHT, self.city, GRAY, 40))
+        layout.addItem(UiTextLayoutItem(layout, UiAlignment.LEFT, self.city, GRAY, 40))
         layout.newLine()
         layout.addItem(UiTextLayoutItem(layout, UiAlignment.CENTER, self.currentConditions, GRAY, 30))
         layout.newLine()
@@ -64,11 +64,11 @@ class WeatherPanel(UiPanel):
         layout.newLine()
         layout.addItem(UiSpaceLayoutItem(layout, 1, 50))
         layout.newLine()
-        layout.addItem(UiTextLayoutItem(layout, UiAlignment.LEFT, "Temperature: {:5.1f}".format(self.currentTemp), GRAY, 30))
+        layout.addItem(UiTextLayoutItem(layout, UiAlignment.LEFT, "Temp: {:5.1f}".format(self.currentTemp), GRAY, 30))
         layout.newLine()
-        layout.addItem(UiTextLayoutItem(layout, UiAlignment.LEFT, "Sunrise: {}".format(self.sunrise), GRAY, 30))
+        layout.addItem(UiTextLayoutItem(layout, UiAlignment.LEFT, "Sunrise: {}".format(self.formatTime(self.sunrise)), GRAY, 30))
         layout.newLine()
-        layout.addItem(UiTextLayoutItem(layout, UiAlignment.LEFT, "Sunset: {}".format(self.sunset), GRAY, 30))
+        layout.addItem(UiTextLayoutItem(layout, UiAlignment.LEFT, "Sunset: {}".format(self.formatTime(self.sunset)), GRAY, 30))
 
         layout.draw(pygame, screen)
 
@@ -114,7 +114,11 @@ class WeatherPanel(UiPanel):
 
         print("City: {}, conditions: {}, icon: {}, icon ID: {}".format(self.city, self.currentConditions, self.iconName, self.weatherIconId))
         print("Current temp: {}, Min temp: {}, Max temp: {}".format(self.currentTemp, self.minTemp, self.maxTemp))
-        print("Sunrise: {}, Sunset: {}".format(self.sunrise, self.sunset))
+        print("Sunrise: {}, Sunset: {}".format(self.formatTime(self.sunrise), self.formatTime(self.sunset)))
+
+    def formatTime(self, time):
+        timeStr = time.strftime("%I:%M %p")
+        return timeStr
 
     def kelvinToFahrenheight(self, kelvin):
         return (kelvin - 273.15) * 9.0 / 5.0 + 32.0

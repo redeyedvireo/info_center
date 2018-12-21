@@ -57,7 +57,8 @@ class UiBacklightController:
             self.currentState = self.ON
 
     def syncBacklightState(self):
-        with open("/sys/class/backlight/rpi_backlight/bl_power", "r") as f:
-            val = int(f.read())
-            self.currentState = self.ON if val == 0 else self.OFF
+        if not self.disabled:
+            with open("/sys/class/backlight/rpi_backlight/bl_power", "r") as f:
+                val = int(f.read())
+                self.currentState = self.ON if val == 0 else self.OFF
 

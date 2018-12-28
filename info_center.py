@@ -4,6 +4,7 @@
 # info_center.py
 # A UI for viewing information about the environment.
 
+import os
 import argparse
 import pygame
 import configparser
@@ -15,6 +16,8 @@ from touch_area import TouchArea
 from button_strip import ButtonStrip
 from time_panel import TimePanel
 from weather_panel import WeatherPanel
+
+scriptDir = os.path.dirname(os.path.realpath(__file__))
 
 WHITE = 255, 255, 255
 GRAY = 20, 20, 20
@@ -50,12 +53,6 @@ def mainLoop(windowedMode, noBacklight):
 
     pygame.display.set_caption("Info Center")
 
-    # Create myimage and set transparency to top left pixel
-    newsurface = pygame.Surface((80,80))
-    myimage = newsurface.convert()
-    ckey = myimage.get_at((0,0))
-    myimage.set_colorkey(ckey, RLEACCEL)
-
     backlightController = UiBacklightController()
 
     backlightController.disabled = noBacklight
@@ -67,19 +64,30 @@ def mainLoop(windowedMode, noBacklight):
     mainScreen = uiManager.addScreen("main")
 
     # Create a button
-    testButton = Button.createSolidButton(719, 0, 80, 80, (50, 100, 190), (200, 30, 140), lambda: uiManager.displayScreen("second"))
+    testButton = Button.createSolidButton(719, 399, 80, 80, (50, 100, 190), (200, 30, 140), lambda: uiManager.displayScreen("second"))
     mainScreen.addElement(testButton)
 
     # Create a Touch Area
-    testTouchArea = TouchArea(0, 450, 800, 30, 1, lambda : uiManager.terminate())
-    mainScreen.addElement(testTouchArea)
+    # testTouchArea = TouchArea(0, 450, 800, 30, 1, lambda : uiManager.terminate())
+    # mainScreen.addElement(testTouchArea)
+
+    # Exit button
+
+    # exitPressedSurface = pygame.Surface((exitImage.get_width(), exitImage.get_height()))
+    # exitPressedSurface.fill(WHITE)
+    # exitPressedSurface.blit(exitImage, (0, 0), special_flags=BLEND_RGBA_ADD)
+
+    # exitButton = Button.createSolidButton(0, 399, 80, 80, RED, BLUE, lambda: uiManager.terminate())
+
+    exitButton = Button.createButton(0, 432, "exit.png", "exit-pressed.png", lambda : uiManager.terminate())
+    mainScreen.addElement(exitButton)
 
     # Create a TimePanel
     timePanel = TimePanel(0, 0, 500, 150, 1, BLACK, BLUE)
 
     # Create a WeatherPanel
     # TODO: Ideally, the WeatherPanel should set its own size
-    weatherPanel = WeatherPanel(0, 170, 300, 250, 2, BLACK, BLUE, appid=weatherAppId, zipcode=zipcode)
+    weatherPanel = WeatherPanel(500, 0, 300, 250, 0, BLACK, BLUE, appid=weatherAppId, zipcode=zipcode)
 
     mainScreen.addElement(timePanel)
     mainScreen.addElement(weatherPanel)

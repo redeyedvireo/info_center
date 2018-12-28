@@ -4,6 +4,7 @@
 
 from ui_element import UiElement
 from pygame import Surface
+from ui_utility import UiUtility
 
 
 class Button(UiElement):
@@ -22,14 +23,14 @@ class Button(UiElement):
     STATE_NORMAL = 0
     STATE_PRESSED = 1
 
-    def __init__(self, x, y, normalImage, pressedImage, onClickedFunc, buttonWidth):
+    def __init__(self, x, y, normalImage, pressedImage, onClickedFunc, borderWidth):
         normalImageWidth, normalImageHeight = normalImage.get_size()
         pressedImageWidth, pressedImageHeight = pressedImage.get_size()
 
         width = max(normalImageWidth, pressedImageWidth)
         height = max(normalImageHeight, pressedImageHeight)
 
-        super(Button, self).__init__(x, y, width, height, buttonWidth)
+        super(Button, self).__init__(x, y, width, height, borderWidth)
         self.normalImage = normalImage
         self.pressedImage = pressedImage
         self.state = self.STATE_NORMAL
@@ -46,6 +47,14 @@ class Button(UiElement):
         pressedSurface = Surface((width, height))
         pressedImage = pressedSurface.convert()
         pressedImage.fill(colorPressed)
+
+        return Button(x, y, normalImage, pressedImage, onClickedFunc, 0)
+
+    @staticmethod
+    def createButton(x, y, normalImageFileName, pressedImageFileName, onClickedFunc):
+        """ Creates a button with normal and pressed images. """
+        normalImage = UiUtility.loadImage(normalImageFileName)
+        pressedImage = UiUtility.loadImage(pressedImageFileName)
 
         return Button(x, y, normalImage, pressedImage, onClickedFunc, 0)
 

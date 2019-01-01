@@ -18,4 +18,13 @@ class UiUtility:
     @staticmethod
     def loadImage(fileName):
         """ Loads an image from the images directory. """
-        return pygame.image.load(os.path.join(scriptDir, "images", fileName)).convert()
+        return UiUtility._loadImage(os.path.join(scriptDir, "images", fileName))
+
+    @staticmethod
+    def loadWeatherIcon(fileName):
+        """ Loads a weather icon. """
+        return UiUtility._loadImage(os.path.join(scriptDir, "weather", fileName))
+
+    @staticmethod
+    def _loadImage(filePath):
+        return pygame.image.load(filePath).convert()

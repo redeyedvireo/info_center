@@ -2,6 +2,7 @@
 #
 # A panel that displays the current time.
 
+import pygame
 from ui_panel import UiPanel
 from downloader import Downloader
 from datetime import datetime
@@ -10,6 +11,8 @@ from ui_text_layout_item import UiTextLayoutItem
 from ui_graphic_layout_item import UiGraphicLayoutItem
 from ui_space_layout_item import UiSpaceLayoutItem
 from ui_alignment import UiAlignment
+from weather_icon_mapper import WeatherIconMapper
+from ui_utility import UiUtility
 from ui_textutils import TextUtil
 import operator
 import json
@@ -34,7 +37,7 @@ class WeatherPanel(UiPanel):
         self.sunset = 0
         self.city = "Unknown"
         self.iconName = None
-        self.image = None
+        self.weatherIconId = 0
         self.icon = None
         self.needsUpdate = True
 
@@ -45,13 +48,6 @@ class WeatherPanel(UiPanel):
 
     def draw(self, pygame, screen):
         super(WeatherPanel, self).draw(pygame, screen)
-
-        # Icon
-        if self.image is not None:
-            # Does image need to be processed before it can be used by Pygame?
-            memFileObj = io.BytesIO(self.image)
-
-            self.icon = pygame.image.load(memFileObj)
 
         # Use UiLayout
         layout = UiLayout(self.rect, 5)
@@ -124,13 +120,30 @@ class WeatherPanel(UiPanel):
         return (kelvin - 273.15) * 9.0 / 5.0 + 32.0
 
     def fetchIcon(self, iconName):
-        downloader = Downloader(None)
+        iconFileName = None
 
-        # TODO: Do in either a background thread, or a coroutine
-        url = "http://openweathermap.org/img/w/{}.png".format(iconName)
-        downloader.download(url)
+        if self.weatherIconId >= 200:
+            iconFileName, description = WeatherIconMapper.convertIcon(self.weatherIconId)
+            print("Icon file name: {}, Description: {}".format(iconFileName, description))
 
-        self.image = downloader.getData()
+        if iconFileName is not None:
+            self.icon = UiUtility.loadWeatherIcon(iconFileName)
+            # TODO: The icon content is black.  It will need to be converted to gray.
+        else:
+            # This weather icon ID is not mapped to a weather icon.  In this case,
+            # fetch the icon from OpenWeatherMap
+            downloader = Downloader(None)
+
+            # TODO: Do in either a background thread, or a coroutine
+            url = "http://openweathermap.org/img/w/{}.png".format(iconName)
+            downloader.download(url)
+
+            image = downloader.getData()
+
+            # Does image need to be processed before it can be used by Pygame?
+            memFileObj = io.BytesIO(image)
+
+            self.icon = pygame.image.load(memFileObj)
 
     def update(self, pygame, screen):
         """ Updates the weather.  Redraws, as necessary. """

@@ -27,4 +27,4 @@ class UiUtility:
 
     @staticmethod
     def _loadImage(filePath):
-        return pygame.image.load(filePath).convert()
+        return pygame.image.load(filePath).convert_alpha()

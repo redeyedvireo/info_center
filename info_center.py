@@ -80,6 +80,7 @@ def mainLoop(windowedMode, noBacklight):
     # exitButton = Button.createSolidButton(0, 399, 80, 80, RED, BLUE, lambda: uiManager.terminate())
 
     exitButton = Button.createButton(0, 432, "exit.png", "exit-pressed.png", lambda : uiManager.terminate())
+    #exitButton = Button.createButtonWithAutoPressed(0, 432, "exit.png", lambda : uiManager.terminate())
     mainScreen.addElement(exitButton)
 
     # Create a TimePanel

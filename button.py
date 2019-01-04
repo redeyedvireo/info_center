@@ -3,6 +3,7 @@
 # Button class.
 
 from ui_element import UiElement
+import pygame
 from pygame import Surface
 from ui_utility import UiUtility
 
@@ -55,6 +56,16 @@ class Button(UiElement):
         """ Creates a button with normal and pressed images. """
         normalImage = UiUtility.loadImage(normalImageFileName)
         pressedImage = UiUtility.loadImage(pressedImageFileName)
+
+        return Button(x, y, normalImage, pressedImage, onClickedFunc, 0)
+
+    @staticmethod
+    def createButtonWithAutoPressed(x, y, normalImageFileName, onClickedFunc):
+        """ Creates a button with normal and pressed images.  The pressed image is generated automatically. """
+        normalImage = UiUtility.loadImage(normalImageFileName)
+        pressedImage = Surface((normalImage.get_width(), normalImage.get_height()))
+        pressedImage.fill((255, 255, 255))
+        pressedImage.blit(normalImage, (0, 0), special_flags=pygame.BLEND_RGBA_ADD)
 
         return Button(x, y, normalImage, pressedImage, onClickedFunc, 0)
 

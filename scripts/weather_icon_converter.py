@@ -7,30 +7,37 @@ import os
 import argparse
 import subprocess
 
+scriptDir = os.path.dirname(os.path.realpath(__file__))
 
-def processFile(dirName, fileName):
+
+def processFile(dirName, fileName, destDir):
     baseName, fileExtension = fileName.split(".")
 
     svgFile = fileName
     pngFile = "{}.png".format(baseName)
 
     svgPath = os.path.join(dirName, fileName)
-    pngPath = os.path.join(dirName, pngFile)
+    pngPath = os.path.join(destDir, pngFile)
 
     print("Converting {} to {}".format(svgPath, pngPath))
 
+    command = ["C:/Program Files/Inkscape/inkscape", "-z", "-t", "-e", pngPath, svgPath]
+    #print("Command: {}".format(" ".join(command)))
+
     try:
-        subprocess.check_output(["C:/Program Files/Inkscape/inkscape", "-z", "-e", pngPath, "-w" "200", "-h", "200", svgPath])
+        subprocess.check_output(command, stderr=subprocess.STDOUT)
 
     except subprocess.CalledProcessError as err:
-        print("Error converting {}: {}".format(svgFile, err.output))
+        print("Error converting {}: {}".format(svgFile, err.output.decode('utf-8')))
 
 
-def processFiles(inDirectory):
+def processFiles(inDirectory, scriptDir):
     files = os.listdir(inDirectory)
-    print("Files:")
+    parentDir, scriptDir = os.path.split(scriptDir)
+    weatherIconDir = os.path.join(parentDir, "weather")
+
     for file in files:
-        processFile(inDirectory, file)
+        processFile(inDirectory, file, weatherIconDir)
 
 
 # ---------------------------------------------------------------
@@ -43,4 +50,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     print("Processing icons in: {}".format(args.directory))
-    processFiles(args.directory)
+    processFiles(args.directory, scriptDir)

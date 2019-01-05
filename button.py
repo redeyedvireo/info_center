@@ -6,6 +6,7 @@ from ui_element import UiElement
 import pygame
 from pygame import Surface
 from ui_utility import UiUtility
+from ui_colors import UiColors
 
 
 class Button(UiElement):
@@ -60,12 +61,19 @@ class Button(UiElement):
         return Button(x, y, normalImage, pressedImage, onClickedFunc, 0)
 
     @staticmethod
-    def createButtonWithAutoPressed(x, y, normalImageFileName, onClickedFunc):
-        """ Creates a button with normal and pressed images.  The pressed image is generated automatically. """
+    def createButtonWithAutoPressed(x, y, normalImageFileName, foregroundColor, onClickedFunc):
+        """ Creates a button with normal and pressed images.  The pressed image is generated automatically.
+            The foregroundColor parameter allows the button to be colored with the given color.  This only works if
+            the button's background is transparent.  This can be set to None to avoid this behavior. """
         normalImage = UiUtility.loadImage(normalImageFileName)
+        if foregroundColor is not None:
+            normalImage.fill(UiColors.GRAY, special_flags=pygame.BLEND_RGB_ADD)
+
         pressedImage = Surface((normalImage.get_width(), normalImage.get_height()))
         pressedImage.fill((255, 255, 255))
-        pressedImage.blit(normalImage, (0, 0), special_flags=pygame.BLEND_RGBA_ADD)
+
+        # Ooops - add is not right.  Want to replace the existing non-transparent pixels with the new ones.
+        pressedImage.blit(normalImage, (0, 0), special_flags=pygame.BLEND_RGB_MIN)
 
         return Button(x, y, normalImage, pressedImage, onClickedFunc, 0)
 

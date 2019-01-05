@@ -10,6 +10,7 @@ import pygame
 import configparser
 from pygame.locals import *
 from ui_manager import UiManager
+from ui_screensaver import UiScreenSaver
 from ui_backlight_controller import UiBacklightController
 from button import Button
 from touch_area import TouchArea
@@ -57,7 +58,9 @@ def mainLoop(windowedMode, noBacklight):
 
     backlightController.disabled = noBacklight
 
-    uiManager = UiManager(pygame, screen, backlightController)
+    screenSaver = UiScreenSaver(pygame, screen)
+
+    uiManager = UiManager(pygame, screen, backlightController, screenSaver)
     uiManager.init()
 
     # Create the main screen
@@ -148,4 +151,5 @@ if __name__ == "__main__":
     parser.add_argument("--no_backlight", action="store_true", default=False, dest="no_backlight", help="Disable backlight control")
 
     args = parser.parse_args()
-    mainLoop(args.windowed, args.no_backlight)
+    #mainLoop(args.windowed, args.no_backlight)
+    mainLoop(args.windowed, True)       # For now, we are disabling the backlight controller

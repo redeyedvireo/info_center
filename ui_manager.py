@@ -11,25 +11,31 @@ from ui_screen import UiScreen
 
 
 class UiManager:
-    def __init__(self, pygame, screen, backlightController):
+    def __init__(self, pygame, screen, backlightController, screenSaver):
         super(UiManager, self).__init__()
         self.ONE_SECOND_EVENT = pygame.USEREVENT + 1
 
         self.pygame = pygame
         self.screen = screen
         self.backlightController = backlightController
+        self.screenSaver = screenSaver
 
         # A map of screen IDs to UiScreen objects.
         self.screenMap = {}
+
+        # Add the screen saver screen to the UiScreen objects
+        self.screenMap[self.screenSaver.SCREEN_ID] = self.screenSaver
 
         # User timers.
         self.timers = {}
 
         self.currentScreen = None
+        self.currentScreenId = ""
         self.continueRunning = True
 
     def init(self):
         self.backlightController.init(self)
+        self.screenSaver.init(self)
 
     def addScreen(self, id):
         uiScreen = UiScreen(self, self.pygame, self.screen)
@@ -37,6 +43,7 @@ class UiManager:
         return uiScreen
 
     def displayScreen(self, id):
+        self.currentScreenId = id
         self.currentScreen = self.screenMap[id]
         self.screen.fill((0, 0, 0))
         self.currentScreen.display()

@@ -4,9 +4,7 @@
 
 import datetime
 from ui_panel import UiPanel
-
-GRAY = 80, 80, 80
-# GRAY = 120, 120, 120
+from ui_colors import UiColors
 
 
 class TimePanel(UiPanel):
@@ -19,10 +17,10 @@ class TimePanel(UiPanel):
     def draw(self, pygame, screen):
         super(TimePanel, self).draw(pygame, screen)
         font = pygame.font.Font(None, 220)
-        fontimg = font.render(self.currentHoursMinutesStr, 1, GRAY)
+        fontimg = font.render(self.currentHoursMinutesStr, 1, UiColors.GRAY)
         screen.blit(fontimg, self.pos())
         smallerFont = pygame.font.Font(None, 100)
-        secondsImage = smallerFont.render(self.currentSecondsStr, 1, GRAY)
+        secondsImage = smallerFont.render(self.currentSecondsStr, 1, UiColors.GRAY)
         curPosX, curPosY = self.pos()
         #newPos = curPosX + 400, curPosY + 10       # Hang the seconds at the top
         # newPos = curPosX + 400, curPosY + 68        # Drop the seconds at the bottom

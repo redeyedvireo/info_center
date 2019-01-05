@@ -9,17 +9,12 @@ from datetime import datetime
 from ui_layout import UiLayout
 from ui_text_layout_item import UiTextLayoutItem
 from ui_graphic_layout_item import UiGraphicLayoutItem
-from ui_space_layout_item import UiSpaceLayoutItem
 from ui_alignment import UiAlignment
 from weather_icon_mapper import WeatherIconMapper
 from ui_utility import UiUtility
-from ui_textutils import TextUtil
-import operator
+from ui_colors import UiColors
 import json
 import io
-
-# TODO: Put all color constants in a global file.
-GRAY = 80, 80, 80
 
 
 class WeatherPanel(UiPanel):
@@ -52,11 +47,11 @@ class WeatherPanel(UiPanel):
         # Use UiLayout
         layout = UiLayout(self.rect, 5)
         layout.start()
-        layout.addItem(UiTextLayoutItem(layout, UiAlignment.RIGHT, "{:5.1f} F".format(self.currentTemp), GRAY, 70))
+        layout.addItem(UiTextLayoutItem(layout, UiAlignment.RIGHT, "{:5.1f} F".format(self.currentTemp), UiColors.GRAY, 70))
         layout.newLine()
         layout.addItem(UiGraphicLayoutItem(layout, UiAlignment.RIGHT, self.icon))
         layout.newLine()
-        layout.addItem(UiTextLayoutItem(layout, UiAlignment.RIGHT, self.currentConditions, GRAY, 40))
+        layout.addItem(UiTextLayoutItem(layout, UiAlignment.RIGHT, self.currentConditions, UiColors.GRAY, 40))
 
         layout.draw(pygame, screen)
 
@@ -120,7 +115,7 @@ class WeatherPanel(UiPanel):
 
         if iconFileName is not None:
             self.icon = UiUtility.loadWeatherIcon(iconFileName)
-            self.icon.fill(GRAY, special_flags=pygame.BLEND_RGB_ADD)
+            self.icon.fill(UiColors.GRAY, special_flags=pygame.BLEND_RGB_ADD)
 
         else:
             # This weather icon ID is not mapped to a weather icon.  In this case,

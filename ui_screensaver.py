@@ -18,8 +18,8 @@ class UiScreenSaver(UiScreen):
     def init(self, uiManager):
         self.uiManager = uiManager
 
-        #self.uiManager.setTimer(timerId=self.SCREEN_SAVER_TIMER, minutes=15, callback=self.screenSaverTrigger)
-        self.uiManager.setTimer(timerId=self.SCREEN_SAVER_TIMER_ID, seconds=10, callback=self.screenSaverTrigger)  # DEBUG
+        self.uiManager.setTimer(timerId=self.SCREEN_SAVER_TIMER_ID, minutes=5, callback=self.screenSaverTrigger)
+        # self.uiManager.setTimer(timerId=self.SCREEN_SAVER_TIMER_ID, seconds=10, callback=self.screenSaverTrigger)  # DEBUG
 
     def screenSaverTrigger(self):
         print("Screen Saver triggered.")

@@ -47,7 +47,7 @@ class WeatherPanel(UiPanel):
         # Use UiLayout
         layout = UiLayout(self.rect, 5)
         layout.start()
-        layout.addItem(UiTextLayoutItem(layout, UiAlignment.RIGHT, "{:5.1f} F".format(self.currentTemp), UiColors.GRAY, 70))
+        layout.addItem(UiTextLayoutItem(layout, UiAlignment.RIGHT, "{:5.0f} F".format(self.currentTemp), UiColors.GRAY, 70))
         layout.newLine()
         layout.addItem(UiGraphicLayoutItem(layout, UiAlignment.RIGHT, self.icon))
         layout.newLine()

@@ -85,18 +85,9 @@ class UiManager:
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             return False
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            if self.backlightController.isOn():
-                self.backlightController.resetUiTimeout()
-                return self.currentScreen.handleMouseButtonDown(event)
-            else:
-                return True
+            return self.currentScreen.handleMouseButtonDown(event)
         elif event.type == pygame.MOUSEBUTTONUP:
-            if self.backlightController.isOn():
-                return self.currentScreen.handleMouseButtonUp(event)
-            else:
-                # Turn backlight on
-                self.backlightController.turnOnBacklight()
-                return True
+            return self.currentScreen.handleMouseButtonUp(event)
         else:
             return True
 

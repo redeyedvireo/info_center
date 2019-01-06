@@ -18,8 +18,8 @@ class UiScreenSaver(UiScreen):
     def init(self, uiManager):
         self.uiManager = uiManager
 
-        self.uiManager.setTimer(timerId=self.SCREEN_SAVER_TIMER_ID, minutes=5, callback=self.screenSaverTrigger)
-        # self.uiManager.setTimer(timerId=self.SCREEN_SAVER_TIMER_ID, seconds=10, callback=self.screenSaverTrigger)  # DEBUG
+        # self.uiManager.setTimer(timerId=self.SCREEN_SAVER_TIMER_ID, minutes=5, callback=self.screenSaverTrigger)
+        self.uiManager.setTimer(timerId=self.SCREEN_SAVER_TIMER_ID, seconds=10, callback=self.screenSaverTrigger)  # DEBUG
 
     def screenSaverTrigger(self):
         print("Screen Saver triggered.")
@@ -27,6 +27,7 @@ class UiScreenSaver(UiScreen):
             self.active = True
             self.currentScreenId = self.uiManager.currentScreenId
             self.uiManager.displayScreen(self.SCREEN_ID)
+            self.uiManager.turnOffBacklight()
 
     def resetUiTimeout(self):
         timer = self.uiManager.getTimer(self.SCREEN_SAVER_TIMER_ID)
@@ -35,6 +36,7 @@ class UiScreenSaver(UiScreen):
     def handleMouseButtonUp(self, event):
         # Any touch event will end the screen saver.
         self.active = False
+        self.uiManager.turnOnBacklight()
         self.uiManager.displayScreen(self.currentScreenId)
         self.resetUiTimeout()
         return True

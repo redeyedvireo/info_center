@@ -21,7 +21,7 @@ class UiBacklightController:
         # Set a timer to turn off the backlight after a period of time.
         # TODO: Will need to reset the timer whenever there is user activity
         #self.uiManager.setTimer(timerId=self.BACKLIGHT_TIMER_ID, minutes=3, callback=self.turnOffBacklight)
-        self.uiManager.setTimer(timerId=self.BACKLIGHT_TIMER_ID, seconds=30, callback=self.turnOffBacklight)     # For debugging
+        #self.uiManager.setTimer(timerId=self.BACKLIGHT_TIMER_ID, seconds=30, callback=self.turnOffBacklight)     # For debugging
 
     def resetUiTimeout(self):
         timer = self.uiManager.getTimer(self.BACKLIGHT_TIMER_ID)

@@ -79,7 +79,7 @@ class UiLayout:
             x = linePosX
         elif layoutItem.hAlignment == UiAlignment.RIGHT:
             x = linePosX + lineWidth - layoutItem.width
-        elif layoutItem.hAlignment == UiAlignment.CENTER:
+        elif layoutItem.hAlignment == UiAlignment.HCENTER:
             x = linePosX + (self.rect.width - layoutItem.width) / 2
         else:
             # Unknown alignment constant

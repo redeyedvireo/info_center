@@ -81,7 +81,7 @@ def mainLoop(windowedMode, noBacklight):
     mainScreen.addElement(exitButton)
 
     # Create a TimePanel
-    timePanel = TimePanel(0, 0, 500, 150, 1, UiColors.BLACK, UiColors.BLUE)
+    timePanel = TimePanel(0, 0, 500, 160, 1, UiColors.BLACK, UiColors.BLUE)
 
     # Create a WeatherPanel
     # TODO: Ideally, the WeatherPanel should set its own size

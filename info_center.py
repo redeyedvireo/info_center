@@ -145,5 +145,5 @@ if __name__ == "__main__":
     parser.add_argument("--no_backlight", action="store_true", default=False, dest="no_backlight", help="Disable backlight control")
 
     args = parser.parse_args()
-    #mainLoop(args.windowed, args.no_backlight)
-    mainLoop(args.windowed, True)       # For now, we are disabling the backlight controller
+    mainLoop(args.windowed, args.no_backlight)
+    #mainLoop(args.windowed, True)       # For now, we are disabling the backlight controller

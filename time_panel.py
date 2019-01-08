@@ -21,10 +21,11 @@ class TimePanel(UiPanel):
 
         curPosX, curPosY = self.pos()
         secondsPos = curPosX + timeImage.get_width() + 4, curPosY + 68
-        UiUtility.drawText(pygame, screen, secondsPos, self.currentSecondsStr, 100)
+        secondsImage = UiUtility.drawText(pygame, screen, secondsPos, self.currentSecondsStr, 100)
 
         amPmPos = secondsPos[0], curPosY + 10       # Hang AM/PM at the top
-        UiUtility.drawText(pygame, screen, amPmPos, self.amPmStr, 50)
+        amRect = pygame.Rect(secondsPos[0], curPosY, secondsImage.get_width(), secondsImage.get_height())
+        UiUtility.drawText(pygame, screen, amPmPos, self.amPmStr, 50, hAlign=UiAlignment.HCENTER, vAlign=UiAlignment.BOTTOM, box=amRect)
 
         datePos = curPosX, curPosY + timeImage.get_height()
         UiUtility.drawText(pygame, screen, datePos, self.dateStr, 30, hAlign=UiAlignment.HCENTER, vAlign=UiAlignment.BOTTOM, box=self.rect)

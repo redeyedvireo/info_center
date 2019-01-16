@@ -21,7 +21,7 @@ def processFile(dirName, fileName, destDir):
 
     print("Converting {} to {}".format(svgPath, pngPath))
 
-    command = ["C:/Program Files/Inkscape/inkscape", "-z", "-t", "-e", pngPath, svgPath]
+    command = ["C:/Program Files/Inkscape/inkscape", "-z", "-t", "-w", "90", "-h", "90", "-e", pngPath, svgPath]
     #print("Command: {}".format(" ".join(command)))
 
     try:

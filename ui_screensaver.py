@@ -36,7 +36,8 @@ class UiScreenSaver(UiScreen):
     def handleMouseButtonUp(self, event):
         # Any touch event will end the screen saver.
         self.active = False
-        self.uiManager.turnOnBacklight()
         self.uiManager.displayScreen(self.currentScreenId)
+        self.uiManager.updateUiElements()
+        self.uiManager.turnOnBacklight()
         self.resetUiTimeout()
         return True

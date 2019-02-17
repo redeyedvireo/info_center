@@ -53,4 +53,7 @@ class Downloader:
         return self.data
 
     def getDataAsString(self):
-        return self.data.decode('utf-8')
+        if self.data is not None:
+            return self.data.decode('utf-8')
+        else:
+            return ""

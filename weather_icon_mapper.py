@@ -2,13 +2,14 @@
 #
 # Maps weather icon IDs from OpenWeatherMap to weather icons from https://github.com/erikflowers/weather-icons
 
+from datetime import datetime
 
 class WeatherIconMapper:
     def __init__(self):
         pass
 
     @staticmethod
-    def convertIcon(iconId):
+    def convertIcon(iconId, sunrise, sunset):
         """ Converts an OpenWeatherMap icon ID to a weather icon file name.
             Returns a tuple of the form: (icon-filename, description). """
 
@@ -16,13 +17,20 @@ class WeatherIconMapper:
 
         # IDs in 7xx and 9xx do not have a day-/night- prefix
         if iconId not in range(700, 799) and iconId not in range(900, 999):
-            # TODO: Depending on the time of day, use either "day" or "night" as the prefix
-            prefix = "day"
+            prefix = "day" if WeatherIconMapper.isDaytime(sunrise, sunset) else "night"
             iconFileName = "{}-{}".format(prefix, iconFileName)
 
         iconFileName = "wi-{}.png".format(iconFileName)
 
         return iconFileName, description
+
+    @staticmethod
+    def isDaytime(sunrise, sunset):
+        currentTime = datetime.now().time()
+        if sunrise <= currentTime <= sunset:
+            return True
+        else:
+            return False
 
     @staticmethod
     def _iconIdToBaseFileName(iconId):

@@ -110,7 +110,7 @@ class WeatherPanel(UiPanel):
         iconFileName = None
 
         if self.weatherIconId >= 200:
-            iconFileName, description = WeatherIconMapper.convertIcon(self.weatherIconId)
+            iconFileName, description = WeatherIconMapper.convertIcon(self.weatherIconId, self.sunrise.time(), self.sunset.time())
             print("Icon file name: {}, Description: {}".format(iconFileName, description))
 
         if iconFileName is not None:

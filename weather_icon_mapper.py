@@ -15,12 +15,17 @@ class WeatherIconMapper:
 
         iconFileName, description = WeatherIconMapper._iconIdToBaseFileName(iconId)
 
+        # ID 800 is a special case
+        if iconId == 800:
+            iconFileName =  "wi-day-sunny.png" if WeatherIconMapper.isDaytime(sunrise, sunset) else "wi-night-clear.png"
+
         # IDs in 7xx and 9xx do not have a day-/night- prefix
-        if iconId not in range(700, 799) and iconId not in range(900, 999):
+        elif iconId not in range(700, 800) and iconId not in range(900, 1000):
             prefix = "day" if WeatherIconMapper.isDaytime(sunrise, sunset) else "night"
             iconFileName = "{}-{}".format(prefix, iconFileName)
 
-        iconFileName = "wi-{}.png".format(iconFileName)
+        else:
+            iconFileName = "wi-{}.png".format(iconFileName)
 
         return iconFileName, description
 

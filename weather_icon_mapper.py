@@ -22,8 +22,7 @@ class WeatherIconMapper:
         # IDs in 7xx and 9xx do not have a day-/night- prefix
         elif iconId not in range(700, 800) and iconId not in range(900, 1000):
             prefix = "day" if WeatherIconMapper.isDaytime(sunrise, sunset) else "night"
-            iconFileName = "{}-{}".format(prefix, iconFileName)
-
+            iconFileName = "wi-{}-{}.png".format(prefix, iconFileName)
         else:
             iconFileName = "wi-{}.png".format(iconFileName)
 

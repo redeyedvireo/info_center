@@ -17,6 +17,7 @@ from touch_area import TouchArea
 from button_strip import ButtonStrip
 from time_panel import TimePanel
 from weather_panel import WeatherPanel
+from moon_phase_panel import MoonPhasePanel
 
 scriptDir = os.path.dirname(os.path.realpath(__file__))
 
@@ -87,8 +88,12 @@ def mainLoop(windowedMode, noBacklight):
     # TODO: Ideally, the WeatherPanel should set its own size
     weatherPanel = WeatherPanel(500, 0, 300, 250, 0, UiColors.BLACK, UiColors.BLUE, appid=weatherAppId, zipcode=zipcode)
 
+    # Create a MoonPhasePanel
+    moonPhasePanel = MoonPhasePanel(500, 251, 300, 190, 1, UiColors.BLACK, UiColors.BLUE)
+
     mainScreen.addElement(timePanel)
     mainScreen.addElement(weatherPanel)
+    mainScreen.addElement(moonPhasePanel)
 
     # Create a second screen
     secondScreen = uiManager.addScreen("second")

@@ -70,6 +70,10 @@ class WeatherPanel(UiPanel):
         self.fetchIcon(self.iconName)
 
     def parseWeatherJson(self, weatherJson):
+        if weatherJson is None:
+            print("weatherJson is None")
+            return
+
         print(weatherJson)
 
         jsonObj = json.loads(weatherJson)

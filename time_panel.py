@@ -51,5 +51,6 @@ class TimePanel(UiPanel):
             self.previousSecondsStr = tempSecondsStr
             self.currentHoursMinutesStr = tempHoursMinutesStr
             self.currentSecondsStr = tempSecondsStr
+            self.dateStr = dateStr
             self.amPmStr = amPmStr
             self.draw(pygame, screen)

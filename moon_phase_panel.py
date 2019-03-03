@@ -17,6 +17,8 @@ import io
 
 
 class MoonPhasePanel(UiPanel):
+    MOONPHASE_TIMER = "moonphase_timer"
+
     def __init__(self, x, y, width, height, borderWidth, unpressedBackground, pressedBackground):
         super(MoonPhasePanel, self).__init__(x, y, width, height, True, borderWidth, unpressedBackground, pressedBackground)
 
@@ -25,6 +27,7 @@ class MoonPhasePanel(UiPanel):
 
     def init(self, uiManager):
         super(MoonPhasePanel, self).init(uiManager)
+        uiManager.setTimer(timerId=self.MOONPHASE_TIMER, hours=6, callback=self.fetchCurrentMoonPhase)
         self.fetchCurrentMoonPhase()
 
     def draw(self, pygame, screen):

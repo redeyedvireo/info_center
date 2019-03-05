@@ -91,7 +91,7 @@ class MoonPhasePanel(UiPanel):
         elif iconIndex in range(15, 21):
             iconFileName = "wi-moon-waning-gibbous-{}.png".format(iconIndex-14)
 
-        elif iconIndex in range(22, 29):
+        elif iconIndex in range(22, 28):
             iconFileName = "wi-moon-waning-crescent-{}.png".format(iconIndex-21)
 
         elif iconIndex in range(28, 29):

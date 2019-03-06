@@ -18,6 +18,7 @@ from button_strip import ButtonStrip
 from time_panel import TimePanel
 from weather_panel import WeatherPanel
 from moon_phase_panel import MoonPhasePanel
+import services
 
 scriptDir = os.path.dirname(os.path.realpath(__file__))
 
@@ -38,7 +39,7 @@ def readConfig():
 def mainLoop(windowedMode, noBacklight):
     pygame.init()
 
-    zipcode, weatherAppId = readConfig()
+    serviceMaster = services.ServiceMaster()
 
     size = width, height = 800, 480
     if windowedMode:
@@ -54,8 +55,10 @@ def mainLoop(windowedMode, noBacklight):
 
     screenSaver = UiScreenSaver(pygame, screen)
 
-    uiManager = UiManager(pygame, screen, backlightController, screenSaver)
+    uiManager = UiManager(pygame, screen, backlightController, screenSaver, serviceMaster)
     uiManager.init()
+
+    serviceMaster.initServices(uiManager)
 
     # Create the main screen
     mainScreen = uiManager.addScreen("main")
@@ -86,7 +89,7 @@ def mainLoop(windowedMode, noBacklight):
 
     # Create a WeatherPanel
     # TODO: Ideally, the WeatherPanel should set its own size
-    weatherPanel = WeatherPanel(500, 0, 300, 250, 0, UiColors.BLACK, UiColors.BLUE, appid=weatherAppId, zipcode=zipcode)
+    weatherPanel = WeatherPanel(500, 0, 300, 250, 0, UiColors.BLACK, UiColors.BLUE)
 
     # Create a MoonPhasePanel
     moonPhasePanel = MoonPhasePanel(500, 251, 300, 190, 1, UiColors.BLACK, UiColors.BLUE)

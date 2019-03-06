@@ -18,12 +18,8 @@ import io
 
 
 class WeatherPanel(UiPanel):
-    WEATHER_TIMER = "weather_timer"
-
-    def __init__(self, x, y, width, height, borderWidth, unpressedBackground, pressedBackground, appid, zipcode):
+    def __init__(self, x, y, width, height, borderWidth, unpressedBackground, pressedBackground):
         super(WeatherPanel, self).__init__(x, y, width, height, True, borderWidth, unpressedBackground, pressedBackground)
-        self.appid = appid
-        self.zipcode = zipcode
         self.currentConditions = "Unknown conditions..."
         self.currentTemp = 0
         self.minTemp = 0
@@ -35,11 +31,12 @@ class WeatherPanel(UiPanel):
         self.weatherIconId = 0
         self.icon = None
         self.needsUpdate = True
+        self.weatherService = None
 
     def init(self, uiManager):
         super(WeatherPanel, self).init(uiManager)
-        uiManager.setTimer(timerId=self.WEATHER_TIMER, minutes=15, callback=self.fetchCurrentConditions)
-        self.fetchCurrentConditions()
+        self.weatherService = uiManager.getService("weather")
+        self.serviceUpdate("weather")        # The service may have updated by this time
 
     def draw(self, pygame, screen):
         super(WeatherPanel, self).draw(pygame, screen)
@@ -55,53 +52,19 @@ class WeatherPanel(UiPanel):
 
         layout.draw(pygame, screen)
 
-    def fetchCurrentConditions(self):
-        """ Fetches current conditions from the weather server. """
-        downloader = Downloader(None)
-
-        # TODO: Determine how to use async/await.  But, make sure this will run on the version of Python that is
-        # present on the Raspberry Pi.
-        url = "http://api.openweathermap.org/data/2.5/weather?zip={},us&APPID={}".format(self.zipcode, self.appid)
-        downloader.download(url)
-
-        weatherJson = downloader.getDataAsString()
-        self.parseWeatherJson(weatherJson)
+    def serviceUpdate(self, serviceId):
+        """ This is called from the service when the weather is updated. """
+        self.currentConditions = self.weatherService.currentConditions
+        self.currentTemp = self.kelvinToFahrenheight(self.weatherService.currentTemp)
+        self.minTemp = self.kelvinToFahrenheight(self.weatherService.minTemp)
+        self.maxTemp = self.kelvinToFahrenheight(self.weatherService.maxTemp)
+        self.sunrise = self.weatherService.sunrise
+        self.sunset = self.weatherService.sunset
+        self.city = self.weatherService.city
+        self.iconName = self.weatherService.iconName
+        self.weatherIconId = self.weatherService.weatherIconId
 
         self.fetchIcon(self.iconName)
-
-    def parseWeatherJson(self, weatherJson):
-        if weatherJson is None:
-            print("weatherJson is None")
-            return
-
-        print(weatherJson)
-
-        jsonObj = json.loads(weatherJson)
-        self.city = jsonObj['name']
-        weatherObj = jsonObj['weather']
-        self.currentConditions = weatherObj[0]['main']
-
-        mainObj = jsonObj['main']
-        currentTempKelvin = float(mainObj['temp'])
-        minTempKelvin = float(mainObj['temp_min'])
-        maxTempKelvin = float(mainObj['temp_max'])
-
-        self.currentTemp = self.kelvinToFahrenheight(currentTempKelvin)
-        self.minTemp = self.kelvinToFahrenheight(minTempKelvin)
-        self.maxTemp = self.kelvinToFahrenheight(maxTempKelvin)
-
-        sysObj = jsonObj['sys']
-        sunrise = int(sysObj['sunrise'])
-        sunset = int(sysObj['sunset'])
-        self.sunrise = datetime.fromtimestamp(sunrise)
-        self.sunset = datetime.fromtimestamp(sunset)
-
-        self.iconName = weatherObj[0]['icon']
-        self.weatherIconId = weatherObj[0]['id']
-
-        print("City: {}, conditions: {}, icon: {}, icon ID: {}".format(self.city, self.currentConditions, self.iconName, self.weatherIconId))
-        print("Current temp: {}, Min temp: {}, Max temp: {}".format(self.currentTemp, self.minTemp, self.maxTemp))
-        print("Sunrise: {}, Sunset: {}".format(self.formatTime(self.sunrise), self.formatTime(self.sunset)))
 
     def formatTime(self, time):
         timeStr = time.strftime("%I:%M %p")

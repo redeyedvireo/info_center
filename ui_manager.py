@@ -11,7 +11,7 @@ from ui_screen import UiScreen
 
 
 class UiManager:
-    def __init__(self, pygame, screen, backlightController, screenSaver):
+    def __init__(self, pygame, screen, backlightController, screenSaver, serviceMaster):
         super(UiManager, self).__init__()
         self.ONE_SECOND_EVENT = pygame.USEREVENT + 1
 
@@ -19,6 +19,7 @@ class UiManager:
         self.screen = screen
         self.backlightController = backlightController
         self.screenSaver = screenSaver
+        self.serviceMaster = serviceMaster
 
         # A map of screen IDs to UiScreen objects.
         self.screenMap = {}
@@ -100,6 +101,9 @@ class UiManager:
 
     def getTimer(self, timerId):
         return self.timers[timerId]
+
+    def getService(self, serviceId):
+        return self.serviceMaster.getService(serviceId)
 
     def terminate(self):
         """ Stops the event loop. """

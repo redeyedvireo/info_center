@@ -12,8 +12,13 @@ class UiGraphicLayoutItem(UiLayoutItem):
 
     def computeRect(self, pygame):
         """ Renders the text, so that the bounding rect may be determined. """
-        self.width = self.image.get_width()
-        self.height = self.image.get_height()
+        if self.image is not None:
+            self.width = self.image.get_width()
+            self.height = self.image.get_height()
+        else:
+            self.width = 0
+            self.height = 0
 
     def draw(self, screen, pos):
-        screen.blit(self.image, pos)
+        if self.image is not None:
+            screen.blit(self.image, pos)

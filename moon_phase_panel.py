@@ -70,7 +70,7 @@ class MoonPhasePanel(UiPanel):
         if iconIndex == 0:
             iconFileName = "wi-moon-new.png"    # Note: this won't show up on a black screen!
 
-        elif iconIndex == 30:
+        elif iconIndex == 30 or iconIndex == 29:
             iconFileName = "wi-moon-new.png"
 
         elif iconIndex == 7:
@@ -94,8 +94,9 @@ class MoonPhasePanel(UiPanel):
         elif iconIndex in range(22, 28):
             iconFileName = "wi-moon-waning-crescent-{}.png".format(iconIndex-21)
 
-        elif iconIndex in range(28, 29):
+        elif iconIndex == 28:
             iconFileName = "wi-moon-waning-crescent-6.png"
+
         else:
             iconFileName = "wi-na.png"
 

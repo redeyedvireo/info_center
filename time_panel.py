@@ -8,8 +8,8 @@ from ui_utility import UiUtility
 from ui_alignment import UiAlignment
 
 class TimePanel(UiPanel):
-    def __init__(self, x, y, width, height, borderWidth, unpressedBackground, pressedBackground):
-        super(TimePanel, self).__init__(x, y, width, height, True, borderWidth, unpressedBackground, pressedBackground)
+    def __init__(self, x, y, width, height, borderWidth, unpressedBackground, pressedBackground, onClickedFunc):
+        super(TimePanel, self).__init__(x, y, width, height, True, borderWidth, unpressedBackground, pressedBackground, onClickedFunc)
         self.currentHoursMinutesStr, self.currentSecondsStr, self.amPmStr, self.dateStr = self.timeString()
         self.previousHoursMinutesStr = ""
         self.previousSecondsStr = ""

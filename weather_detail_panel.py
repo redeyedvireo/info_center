@@ -1,11 +1,10 @@
-# weather_panel.py
+# weather_detail_panel.py
 #
-# A panel that displays the current weather conditions.
+# A panel that displays a more complete set of current weather conditions.
 
 import pygame
 from ui_panel import UiPanel
 from downloader import Downloader
-from datetime import datetime
 from ui_layout import UiLayout
 from ui_text_layout_item import UiTextLayoutItem
 from ui_graphic_layout_item import UiGraphicLayoutItem
@@ -15,10 +14,9 @@ from ui_utility import UiUtility
 from ui_colors import UiColors
 import io
 
-
-class WeatherPanel(UiPanel):
+class WeatherDetailPanel(UiPanel):
     def __init__(self, x, y, width, height, borderWidth, unpressedBackground, pressedBackground, onClickedFunc):
-        super(WeatherPanel, self).__init__(x, y, width, height, True, borderWidth, unpressedBackground, pressedBackground, onClickedFunc)
+        super(WeatherDetailPanel, self).__init__(x, y, width, height, True, borderWidth, unpressedBackground, pressedBackground, onClickedFunc)
         self.currentConditions = "Unknown conditions..."
         self.currentTemp = 0
         self.minTemp = 0
@@ -33,22 +31,21 @@ class WeatherPanel(UiPanel):
         self.weatherService = None
 
     def init(self, uiManager):
-        super(WeatherPanel, self).init(uiManager)
-        weatherService = self.weatherService = uiManager.getService("weather")
-        weatherService.registerListener(self)
+        super(WeatherDetailPanel, self).init(uiManager)
+        self.weatherService = uiManager.getService("weather")
         self.serviceUpdate("weather")        # The service may have updated by this time
 
     def draw(self, pygame, screen):
-        super(WeatherPanel, self).draw(pygame, screen)
+        super(WeatherDetailPanel, self).draw(pygame, screen)
 
         # Use UiLayout
         layout = UiLayout(self.rect, 5)
         layout.start()
-        layout.addItem(UiTextLayoutItem(layout, UiAlignment.RIGHT, "{:5.0f} F".format(self.currentTemp), UiColors.GRAY, 90))
+        layout.addItem(UiTextLayoutItem(layout, UiAlignment.LEFT, "{:5.0f} F".format(self.currentTemp), UiColors.GRAY, 90))
         layout.newLine()
-        layout.addItem(UiGraphicLayoutItem(layout, UiAlignment.RIGHT, self.icon))
+        layout.addItem(UiGraphicLayoutItem(layout, UiAlignment.LEFT, self.icon))
         layout.newLine()
-        layout.addItem(UiTextLayoutItem(layout, UiAlignment.RIGHT, self.currentConditions, UiColors.GRAY, 40))
+        layout.addItem(UiTextLayoutItem(layout, UiAlignment.LEFT, self.currentConditions, UiColors.GRAY, 40))
 
         layout.draw(pygame, screen)
 
@@ -65,10 +62,6 @@ class WeatherPanel(UiPanel):
         self.weatherIconId = self.weatherService.weatherIconId
 
         self.fetchIcon(self.iconName)
-
-    def formatTime(self, time):
-        timeStr = time.strftime("%I:%M %p")
-        return timeStr
 
     def kelvinToFahrenheight(self, kelvin):
         return (kelvin - 273.15) * 9.0 / 5.0 + 32.0

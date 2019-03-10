@@ -17,6 +17,7 @@ from touch_area import TouchArea
 from button_strip import ButtonStrip
 from time_panel import TimePanel
 from weather_panel import WeatherPanel
+from weather_detail_panel import WeatherDetailPanel
 from moon_phase_panel import MoonPhasePanel
 import services
 
@@ -85,18 +86,27 @@ def mainLoop(windowedMode, noBacklight):
     mainScreen.addElement(exitButton)
 
     # Create a TimePanel
-    timePanel = TimePanel(0, 0, 500, 170, 1, UiColors.BLACK, UiColors.BLUE)
+    timePanel = TimePanel(0, 0, 500, 170, 1, UiColors.BLACK, UiColors.BLUE, None)
 
     # Create a WeatherPanel
     # TODO: Ideally, the WeatherPanel should set its own size
-    weatherPanel = WeatherPanel(500, 0, 300, 250, 0, UiColors.BLACK, UiColors.BLUE)
+    weatherPanel = WeatherPanel(500, 0, 300, 250, 0, UiColors.BLACK, UiColors.BLUE, lambda: uiManager.displayScreen("weatherDetail"))
 
     # Create a MoonPhasePanel
-    moonPhasePanel = MoonPhasePanel(500, 251, 300, 190, 1, UiColors.BLACK, UiColors.BLUE)
+    moonPhasePanel = MoonPhasePanel(500, 251, 300, 190, 1, UiColors.BLACK, UiColors.BLUE, None)
 
     mainScreen.addElement(timePanel)
     mainScreen.addElement(weatherPanel)
     mainScreen.addElement(moonPhasePanel)
+
+    # Create the weather detail screen
+    weatherDetailScreen = uiManager.addScreen("weatherDetail")
+    weatherDetailPanel = WeatherDetailPanel(0, 0, 800, 200, 1, UiColors.BLACK, UiColors.BLUE, None)
+    weatherDetailBackButton = Button.createButtonWithAutoPressed(5, 440, "left-arrow.png", UiColors.GRAY, lambda : backToMainScreen(uiManager))
+
+    weatherDetailScreen.addElement(weatherDetailPanel)
+    weatherDetailScreen.addElement(weatherDetailBackButton)
+
 
     # Create a second screen
     secondScreen = uiManager.addScreen("second")

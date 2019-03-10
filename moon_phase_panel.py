@@ -19,8 +19,8 @@ import io
 class MoonPhasePanel(UiPanel):
     MOONPHASE_TIMER = "moonphase_timer"
 
-    def __init__(self, x, y, width, height, borderWidth, unpressedBackground, pressedBackground):
-        super(MoonPhasePanel, self).__init__(x, y, width, height, True, borderWidth, unpressedBackground, pressedBackground)
+    def __init__(self, x, y, width, height, borderWidth, unpressedBackground, pressedBackground, onClickedFunc):
+        super(MoonPhasePanel, self).__init__(x, y, width, height, True, borderWidth, unpressedBackground, pressedBackground, onClickedFunc)
 
         self.moonPhase = "Moon Phase"
         self.icon = None

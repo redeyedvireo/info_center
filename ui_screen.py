@@ -72,7 +72,7 @@ class UiScreen:
             uiElement.setNormal()
             uiElement.draw(self.pygame, self.screen)
 
-            if isinstance(uiElement, Button) or isinstance(uiElement, TouchArea):
+            if isinstance(uiElement, Button) or isinstance(uiElement, TouchArea) or isinstance(uiElement, UiPanel):
                 uiElement.onClicked()
 
     def getHitUiElement(self, mousePos, uiElementList):

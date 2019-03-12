@@ -33,6 +33,7 @@ class WeatherDetailPanel(UiPanel):
     def init(self, uiManager):
         super(WeatherDetailPanel, self).init(uiManager)
         self.weatherService = uiManager.getService("weather")
+        self.weatherService.registerListener(self)
         self.serviceUpdate("weather")        # The service may have updated by this time
 
     def draw(self, pygame, screen):

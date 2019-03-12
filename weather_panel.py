@@ -34,8 +34,8 @@ class WeatherPanel(UiPanel):
 
     def init(self, uiManager):
         super(WeatherPanel, self).init(uiManager)
-        weatherService = self.weatherService = uiManager.getService("weather")
-        weatherService.registerListener(self)
+        self.weatherService = uiManager.getService("weather")
+        self.weatherService.registerListener(self)
         self.serviceUpdate("weather")        # The service may have updated by this time
 
     def draw(self, pygame, screen):

@@ -101,7 +101,7 @@ def mainLoop(windowedMode, noBacklight):
 
     # Create the weather detail screen
     weatherDetailScreen = uiManager.addScreen("weatherDetail")
-    weatherDetailPanel = WeatherDetailPanel(0, 0, 800, 200, 1, UiColors.BLACK, UiColors.BLUE, None)
+    weatherDetailPanel = WeatherDetailPanel(0, 0, 800, 439, 1, UiColors.BLACK, UiColors.BLUE, None)
     weatherDetailBackButton = Button.createButtonWithAutoPressed(5, 440, "left-arrow.png", UiColors.GRAY, lambda : backToMainScreen(uiManager))
 
     weatherDetailScreen.addElement(weatherDetailPanel)

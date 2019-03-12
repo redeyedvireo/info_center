@@ -38,16 +38,52 @@ class WeatherDetailPanel(UiPanel):
     def draw(self, pygame, screen):
         super(WeatherDetailPanel, self).draw(pygame, screen)
 
+        # Column 1
+        columnRect = self.rect.copy()
+
         # Use UiLayout
-        layout = UiLayout(self.rect, 5)
+        layout = UiLayout(columnRect, 5)
         layout.start()
-        layout.addItem(UiTextLayoutItem(layout, UiAlignment.LEFT, "{:5.0f} F".format(self.currentTemp), UiColors.GRAY, 90))
+        layout.addItem(UiTextLayoutItem(layout, UiAlignment.HCENTER, "{:5.0f} F".format(self.currentTemp), UiColors.GRAY, 90))
         layout.newLine()
-        layout.addItem(UiGraphicLayoutItem(layout, UiAlignment.LEFT, self.icon))
+        layout.addItem(UiGraphicLayoutItem(layout, UiAlignment.HCENTER, self.icon))
         layout.newLine()
-        layout.addItem(UiTextLayoutItem(layout, UiAlignment.LEFT, self.currentConditions, UiColors.GRAY, 40))
+        layout.addItem(UiTextLayoutItem(layout, UiAlignment.HCENTER, self.currentConditions, UiColors.GRAY, 40))
+
+
+        # Second row
+        secondRowTop = 300
+
+        # Column 2
+        columnRect = self.rect.copy()
+        columnRect.width = 200
+        columnRect.left = 125
+        columnRect.top = secondRowTop
+
+        layout2 = UiLayout(columnRect, 5)
+        layout2.start()
+        layout2.addItem(UiTextLayoutItem(layout, UiAlignment.LEFT, "Min temp: {:5.0f} F".format(self.minTemp), UiColors.GRAY, 40))
+        layout2.newLine()
+        layout2.addItem(UiTextLayoutItem(layout, UiAlignment.LEFT, "Max temp: {:5.0f} F".format(self.maxTemp), UiColors.GRAY, 40))
+        layout2.newLine()
+
+
+        # Column 3
+        columnRect = self.rect.copy()
+        columnRect.width = 200
+        columnRect.left = 450
+        columnRect.top = secondRowTop
+
+        layout3 = UiLayout(columnRect, 5)
+        layout3.start()
+        layout3.addItem(UiTextLayoutItem(layout, UiAlignment.LEFT, "Sunrise: {}".format(self.sunrise.time()), UiColors.GRAY, 40))
+        layout3.newLine()
+        layout3.addItem(UiTextLayoutItem(layout, UiAlignment.LEFT, "Sunset: {}".format(self.sunset.time()), UiColors.GRAY, 40))
+        layout3.newLine()
 
         layout.draw(pygame, screen)
+        layout2.draw(pygame, screen)
+        layout3.draw(pygame, screen)
 
     def serviceUpdate(self, serviceId):
         """ This is called from the service when the weather is updated. """

@@ -17,18 +17,20 @@ import io
 
 
 class MoonPhasePanel(UiPanel):
-    MOONPHASE_TIMER = "moonphase_timer"
 
     def __init__(self, x, y, width, height, borderWidth, unpressedBackground, pressedBackground, onClickedFunc):
         super(MoonPhasePanel, self).__init__(x, y, width, height, True, borderWidth, unpressedBackground, pressedBackground, onClickedFunc)
 
         self.moonPhase = "Moon Phase"
         self.icon = None
+        self.moonPhaseIconIndex = 0
+        self.moonPhaseService = None
 
     def init(self, uiManager):
         super(MoonPhasePanel, self).init(uiManager)
-        uiManager.setTimer(timerId=self.MOONPHASE_TIMER, hours=6, callback=self.fetchCurrentMoonPhase)
-        self.fetchCurrentMoonPhase()
+        self.moonPhaseService = uiManager.getService("moonphase")
+        self.moonPhaseService.registerListener(self)
+        self.serviceUpdate("moonphase")
 
     def draw(self, pygame, screen):
         super(MoonPhasePanel, self).draw(pygame, screen)
@@ -42,27 +44,11 @@ class MoonPhasePanel(UiPanel):
 
         layout.draw(pygame, screen)
 
-    def fetchCurrentMoonPhase(self):
-        downloader = Downloader(None)
-
-        currentTimestamp = datetime.now().timestamp()
-
-        url = "http://api.farmsense.net/v1/moonphases/?d={}".format(int(currentTimestamp))
-        downloader.download(url)
-
-        moonPhaseJson = downloader.getDataAsString()
-        self.parseMoonPhaseJson(moonPhaseJson)
-
-    def parseMoonPhaseJson(self, moonPhaseJson):
-        print(moonPhaseJson)
-
-        jsonObj = json.loads(moonPhaseJson)
-        mainMoonPhaseObj = jsonObj[0]
-        self.moonPhase = mainMoonPhaseObj["Phase"]
-
-        iconIndex = int(mainMoonPhaseObj["Index"])
-        print("Moon icon index: {}".format(iconIndex))
-        self.fetchMoonPhaseIcon(iconIndex)
+    def serviceUpdate(self, serviceId):
+        """ This is called from the service when the moon phase is updated. """
+        self.moonPhase = self.moonPhaseService.moonPhase
+        moonPhaseIconIndex = self.moonPhaseService.moonPhaseIconIndex
+        self.fetchMoonPhaseIcon(moonPhaseIconIndex)
 
     def fetchMoonPhaseIcon(self, iconIndex):
         iconFileName = None

@@ -13,6 +13,7 @@ class Downloader:
         self.proxy = proxy
 
     def download(self, url):
+        """ Downloads content from the given URL.  A boolean is returned indicating success or failure. """
         try:
             if self.proxy is not None and self.proxy.usesProxy():
                 proxy_handler = ProxyHandler({'http': 'http://{}:{}@{}:{}'.format(self.proxy.proxyUser, self.proxy.proxyPassword, self.proxy.proxyUrl, self.proxy.proxyPort),
@@ -25,6 +26,7 @@ class Downloader:
 
             self.request = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
             self.data = urlopen(self.request).read()
+            return True
 
         except URLError as e:
             if hasattr(e, 'reason'):
@@ -38,16 +40,21 @@ class Downloader:
             #logging.error(errMsg)
 
             self.data = None
+            return False
+
         except ValueError as e:
             errMsg = "ValueError exception when fetching image: {}: {}".format(url, e)
             print(errMsg)
             #logging.error(errMsg)
             self.data = None
+            return False
+
         except Exception as inst:
             errMsg = "Exception when fetching {}: {}".format(url, inst)
             print(errMsg)
             #logging.error(errMsg)
             self.data = None
+            return False
 
     def getData(self):
         return self.data

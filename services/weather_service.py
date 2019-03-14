@@ -46,7 +46,10 @@ class WeatherService(ServiceBase):
         # TODO: Determine how to use async/await.  But, make sure this will run on the version of Python that is
         # present on the Raspberry Pi.
         url = "http://api.openweathermap.org/data/2.5/weather?zip={},us&APPID={}".format(self.zipcode, self.weatherAppId)
-        downloader.download(url)
+        if not downloader.download(url):
+            # Error occurred in downloading weather data.
+            print("fetchCurrentConditions: Error occurred in downloading weather data.")
+            return
 
         weatherJson = downloader.getDataAsString()
         self.parseWeatherJson(weatherJson)
@@ -87,7 +90,10 @@ class WeatherService(ServiceBase):
 
     def fetchIcon(self, iconName):
         """ Fetch the icon from the internet, even if it ends up not being used. """
-        iconFileName = None
+
+        if iconName is None or len(iconName) == 0:
+            print("fetchIcon: iconName is either None or empty.")
+            return
 
         # This weather icon ID is not mapped to a weather icon.  In this case,
         # fetch the icon from OpenWeatherMap
@@ -95,11 +101,15 @@ class WeatherService(ServiceBase):
 
         # TODO: Do in either a background thread, or a coroutine
         url = "http://openweathermap.org/img/w/{}.png".format(iconName)
-        downloader.download(url)
+        if not downloader.download(url):
+            # Error occurred in downloading.  Abort.
+            print("fetchIcon: Error occurred in downloading icon.")
+            return
 
         image = downloader.getData()
 
-        # Does image need to be processed before it can be used by Pygame?
-        memFileObj = io.BytesIO(image)
+        if image is not None:
+            # Does image need to be processed before it can be used by Pygame?
+            memFileObj = io.BytesIO(image)
 
-        self.icon = pygame.image.load(memFileObj)
+            self.icon = pygame.image.load(memFileObj)

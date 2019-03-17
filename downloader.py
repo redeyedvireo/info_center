@@ -2,7 +2,7 @@
 #
 # A utility class for downloading data.
 
-# import logging     # TODO...
+import logging
 from urllib import request
 from urllib.request import Request, ProxyHandler, HTTPBasicAuthHandler, HTTPHandler, urlopen, HTTPError, URLError
 
@@ -36,23 +36,20 @@ class Downloader:
             else:
                 errMsg = "Unknown URL Exception."
 
-            print(errMsg)
-            #logging.error(errMsg)
+            logging.error(errMsg)
 
             self.data = None
             return False
 
         except ValueError as e:
             errMsg = "ValueError exception when fetching image: {}: {}".format(url, e)
-            print(errMsg)
-            #logging.error(errMsg)
+            logging.error(errMsg)
             self.data = None
             return False
 
         except Exception as inst:
             errMsg = "Exception when fetching {}: {}".format(url, inst)
-            print(errMsg)
-            #logging.error(errMsg)
+            logging.error(errMsg)
             self.data = None
             return False
 

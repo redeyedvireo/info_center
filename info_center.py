@@ -8,6 +8,7 @@ import os
 import argparse
 import pygame
 import configparser
+import logging
 from ui_colors import UiColors
 from ui_manager import UiManager
 from ui_screensaver import UiScreenSaver
@@ -23,6 +24,7 @@ import services
 
 scriptDir = os.path.dirname(os.path.realpath(__file__))
 
+kLogFile = 'info_center.log'
 
 CONFIG_FILE = 'info_center.ini'
 
@@ -39,6 +41,8 @@ def readConfig():
 
 def mainLoop(windowedMode, noBacklight):
     pygame.init()
+    logging.basicConfig(filename=kLogFile, level=logging.INFO, format='%(asctime)s %(message)s',
+                        datefmt='%m/%d/%Y %I:%M:%S %p')
 
     serviceMaster = services.ServiceMaster()
 

@@ -3,6 +3,7 @@
 # Text utilities.
 
 import operator
+import logging
 from ui_alignment import UiAlignment
 
 
@@ -25,7 +26,7 @@ class TextUtil:
             destPos = tuple(map(operator.add, pos, ((totalWidth - img.get_width()) / 2, 0)))
         else:
             # Unknown alignment constant
-            print("drawText: Unknown alignment constant: {}".format(hAlignment))
+            logging.error("drawText: Unknown alignment constant: {}".format(hAlignment))
             return
 
         screen.blit(img, destPos)

@@ -11,6 +11,7 @@
 
 from ui_text_layout_item import UiTextLayoutItem
 from ui_graphic_layout_item import UiGraphicLayoutItem
+import logging
 from ui_alignment import UiAlignment
 
 class UiLayout:
@@ -83,7 +84,7 @@ class UiLayout:
             x = linePosX + (self.rect.width - layoutItem.width) / 2
         else:
             # Unknown alignment constant
-            print("computeItemPos: Unknown alignment constant: {}.  Assuming LEFT".format(layoutItem.hAlignment))
+            logging.error("computeItemPos: Unknown alignment constant: {}.  Assuming LEFT".format(layoutItem.hAlignment))
             x = linePosX
 
         return x, y

@@ -3,6 +3,7 @@ from datetime import datetime
 import configparser
 import json
 import io
+import logging
 from services.service_base import ServiceBase
 from downloader import Downloader
 
@@ -48,7 +49,7 @@ class WeatherService(ServiceBase):
         url = "http://api.openweathermap.org/data/2.5/weather?zip={},us&APPID={}".format(self.zipcode, self.weatherAppId)
         if not downloader.download(url):
             # Error occurred in downloading weather data.
-            print("fetchCurrentConditions: Error occurred in downloading weather data.")
+            logging.error("fetchCurrentConditions: Error occurred in downloading weather data.")
             return
 
         weatherJson = downloader.getDataAsString()
@@ -60,7 +61,7 @@ class WeatherService(ServiceBase):
 
     def parseWeatherJson(self, weatherJson):
         if weatherJson is None:
-            print("weatherJson is None")
+            logging.error("weatherJson is None")
             return
 
         print(weatherJson)
@@ -92,7 +93,7 @@ class WeatherService(ServiceBase):
         """ Fetch the icon from the internet, even if it ends up not being used. """
 
         if iconName is None or len(iconName) == 0:
-            print("fetchIcon: iconName is either None or empty.")
+            logging.error("fetchIcon: iconName is either None or empty.")
             return
 
         # This weather icon ID is not mapped to a weather icon.  In this case,
@@ -103,7 +104,7 @@ class WeatherService(ServiceBase):
         url = "http://openweathermap.org/img/w/{}.png".format(iconName)
         if not downloader.download(url):
             # Error occurred in downloading.  Abort.
-            print("fetchIcon: Error occurred in downloading icon.")
+            logging.error("fetchIcon: Error occurred in downloading icon.")
             return
 
         image = downloader.getData()

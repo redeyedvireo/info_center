@@ -3,3 +3,4 @@
 *.pyc
 
 info_center.ini
+/info_center.log
